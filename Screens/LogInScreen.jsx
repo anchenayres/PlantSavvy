@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextInput, Button, TouchableOpacity  } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
 import { signInUser } from "../Services/firebaseAuth";
 import { onAuthStateChanged } from 'firebase/auth';
@@ -38,23 +38,24 @@ const LogInScreen = ({ navigation }) => {
   
   return (
       <View style={styles.container}>
-        
-      <Text style={styles.heading}>Login</Text>
 
-        <Text style={styles.label}>Email</Text>
+      <Image
+        source={require("../assets/plantLogo2.png")} // Check the path to your image
+        style={styles.logo}
+      />        
+
         <TextInput
           style={styles.input}
           keyboardType="default"
-          placeholder="john@doe.com"
+          placeholder="email"
           defaultValue={email}
           onChangeText={(newValue) => setEmail(newValue)}
         />
 
-        <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.input}
           keyboardType="default"
-          placeholder="Your Password"
+          placeholder="Password"
           secureTextEntry={true}
           defaultValue={password}
           onChangeText={(newValue) => setPassword(newValue)}
@@ -84,6 +85,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  logo: {
+    width: 300, // Adjust the width as needed
+    height: 150, // Adjust the height as needed
+    marginBottom: 80, // Adjust the margin as needed
+  },
   heading: {
     fontWeight: "bold",
     fontSize: 20,
@@ -107,8 +113,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButton: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#0B4D21",
     borderRadius: 5,
+    marginTop: 80,
     padding: 10,
   },
   buttonText: {
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 13,
-    color: "lightblue", 
+    color: "#0B4D21", 
   },
 
 });

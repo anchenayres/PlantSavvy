@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { SafeAreaView, TextInput, Button, TouchableOpacity  } from "react-native";
-import {StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View, Image } from 'react-native';
 
 import { registerNewUser } from "../Services/firebaseAuth";
 
@@ -16,31 +16,32 @@ const RegisterScreen = ({navigation}) => {
 
     return (
             <View style={styles.container}>
-                    <Text style={styles.heading}>Register</Text>
 
-                <Text style={styles.label}>Username</Text>
+            <Image
+                    source={require("../assets/plantLogo2.png")} // Check the path to your image
+                    style={styles.logo}
+            />        
+
                     <TextInput
                         style={styles.input} // Add this line for TextInput styling
                         keyboardType="default"
-                        placeholder="john doe"
+                        placeholder="Username"
                         defaultValue={username}
                         onChangeText={(newValue) => setUsername(newValue)}
                     />
 
-                <Text style={styles.label}>Email</Text>
                         <TextInput
                         style={styles.input} // Add this line for TextInput styling
                         keyboardType="default"
-                        placeholder="john@doe.com"
+                        placeholder="Email"
                         defaultValue={email}
                         onChangeText={(newValue) => setEmail(newValue)}
                         />
 
-                <Text style={styles.label}>Password</Text>
                         <TextInput
                         style={styles.input} // Add this line for TextInput styling
                         keyboardType="default"
-                        placeholder="Your Password"
+                        placeholder="Password"
                         secureTextEntry={true}
                         defaultValue={password}
                         onChangeText={(newValue) => setPassword(newValue)}
@@ -74,6 +75,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    logo: {
+      width: 300, // Adjust the width as needed
+      height: 150, // Adjust the height as needed
+      marginBottom: 80, // Adjust the margin as needed
+    },  
     heading: {
       fontWeight: 'bold',
       fontSize: 20,
@@ -98,19 +104,23 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     registerButton: {
-        backgroundColor: "lightblue",
+        backgroundColor: "#0B4D21",
         borderRadius: 5, 
         padding: 10,
+        marginTop: 80,
     },
-    button: {
-        marginVertical: 10,
+    buttonText: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: "white",
+      textAlign: "center",
     },
-      switch: {
-        marginTop: 20, 
+    switch: {
+      marginTop: 20, 
     },
-        switchText: {
-        fontSize: 13,
-        color: "lightblue", 
+    switchText: {
+      fontSize: 13,
+      color: "#0B4D21", 
     },
     
   });
