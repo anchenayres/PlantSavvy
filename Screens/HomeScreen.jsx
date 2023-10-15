@@ -6,6 +6,7 @@ import { getAuth, signOut } from 'firebase/auth';
 const Stack = createNativeStackNavigator();
 const auth = getAuth();
 
+
 const HomeScreen = ({ navigation }) => {
     const handleLogout = async () => {
       try {
