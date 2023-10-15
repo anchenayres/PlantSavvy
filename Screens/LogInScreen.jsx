@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextInput, Button, TouchableOpacity  } from "react-native";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 
 import { signInUser } from "../Services/firebaseAuth";
 import { onAuthStateChanged } from 'firebase/auth';
@@ -25,12 +25,18 @@ const LogInScreen = ({ navigation }) => {
       const user = await signInUser(email, password);
     if (user && user.email) {
       console.log("Signed in User:", user.email);
+      Alert.alert("Success", "You have successfully logged in.", [
+        { text: "OK" },
+      ]);
       navigation.navigate("HomeScreen");
     } else {
       console.error("User is not signed in.");
     }
   } catch (error) {
     console.error("Sign-in failed:", error.message);
+    Alert.alert("Error", "Incorrect email or password. Please try again.", [
+      { text: "OK" },
+    ]);
   }
   };
 
