@@ -1,42 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { TextInput, Button, TouchableOpacity  } from "react-native";
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
+//import AwesomeAlert from 'react-native-awesome-alerts'; //Alerts
 
 import { signInUser } from "../Services/firebaseAuth";
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase'; 
 
 const LogInScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigation.navigate('HomeScreen');
-      }
-    });
-    return unsubscribe;
-  }, [navigation]);
-
+  const [showErrorMessage, setShowErrorMessage] = useState(false); //Alerts
   
   const handleLogin = async () => {
     try {
       const user = await signInUser(email, password);
     if (user && user.email) {
-      console.log("Signed in User:", user.email);
-      Alert.alert("Success", "You have successfully logged in.", [
-        { text: "OK" },
-      ]);
       navigation.navigate("HomeScreen");
     } else {
-      console.error("User is not signed in.");
+      setShowErrorMessage(true);
     }
   } catch (error) {
-    console.error("Sign-in failed:", error.message);
-    Alert.alert("Error", "Incorrect email or password. Please try again.", [
-      { text: "OK" },
-    ]);
+    setShowErrorMessage(true);
   }
   };
 
@@ -67,9 +50,19 @@ const LogInScreen = ({ navigation }) => {
           onChangeText={(newValue) => setPassword(newValue)}
         />
 
+        {showErrorMessage && (
+          <View style={styles.errorMessage}>
+            <Text style={styles.errorText}>
+              * Incorrect email or password. Please try again.
+            </Text>
+          </View>
+        )}    
+
+
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>        
+        </TouchableOpacity>    
+
       
         <TouchableOpacity
         style={styles.switch} // Apply styles here
@@ -77,6 +70,7 @@ const LogInScreen = ({ navigation }) => {
       >
         <Text style={styles.switchText}>Don't have an account?</Text>
       </TouchableOpacity>
+
 
       </View>
   );
@@ -129,6 +123,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     textAlign: "center",
+  },
+  errorMessage: {
+    borderRadius: 5,
+    marginLeft: 20,
+  },
+  errorText: {
+    color: "red", // Customize the text color
+    fontSize: 8,
+    fontWeight: "bold",
   },
   switch: {
     marginTop: 20, 

@@ -11,7 +11,7 @@ const HomeScreen = ({ navigation }) => {
     const handleLogout = async () => {
       try {
         await signOut(auth);
-        // You can also clear any user-related data from your app's state here.
+        console.log('Logged out user');
         navigation.navigate('LogInScreen');
       } catch (error) {
         console.error('Sign out failed:', error);
