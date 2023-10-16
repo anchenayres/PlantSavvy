@@ -2,6 +2,7 @@ import React, { useState, useEffect }from 'react';
 import {StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const auth = getAuth();
 
@@ -9,8 +10,6 @@ const auth = getAuth();
 const HomeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-
-
 
     const handleLogout = async () => {
       try {
@@ -21,6 +20,11 @@ const HomeScreen = () => {
         console.error('Sign out failed:', error);
       }
     };
+
+    const handleScanNavigation = () => {
+      navigation.navigate('ScanScreen');
+    };
+  
 
     return (
         <View style={styles.container}>
@@ -35,6 +39,9 @@ const HomeScreen = () => {
         />        
 
         <Text style={styles.heading}>My Plants</Text>
+        <TouchableOpacity onPress={handleScanNavigation}>
+          <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
+        </TouchableOpacity>
 
         <View style={styles.placeholderContainer}>
                 <View style={styles.placeholderImageContainer}>
@@ -93,6 +100,13 @@ const styles = StyleSheet.create({
       left: 0, 
       top: -30,
     },
+
+    addIcon: {
+      marginTop: -55, 
+      marginLeft: -50, 
+
+    },
+
     heading:{
         fontWeight: 'bold',
         fontSize: 20,
