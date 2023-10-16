@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect }from 'react';
 import {StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
-const Stack = createNativeStackNavigator();
 const auth = getAuth();
 
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
+  const navigation = useNavigation();
   const route = useRoute();
-  const plantData = route.params ? route.params.plantData : null;
+
+
 
     const handleLogout = async () => {
       try {
@@ -37,17 +37,40 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.heading}>My Plants</Text>
 
         <View style={styles.placeholderContainer}>
-          <View style={styles.placeholderImage}>
-          {plantData && (
-            <View>
-              <Image source={{ uri: plantData.image }} style={styles.plantImage} />
-              <Text>{plantData.name}</Text>
-            </View>
-          )}
+                <View style={styles.placeholderImageContainer}>
+            <Image
+              source={require('../assets/test.jpg')}
+              style={styles.placeholderImage}
+            />
+            <Text style={styles.placeholderText}>Placeholder Plant Name One</Text>
           </View>
-          <Text style={styles.placeholderText}>Placeholder Plant Name</Text>
-        </View>
 
+          <View style={styles.placeholderImageContainer}>
+            <Image
+              source={require('../assets/test4.jpg')}
+              style={styles.placeholderImage}
+            />
+            <Text style={styles.placeholderText}>Placeholder Plant Name Two</Text>
+          </View>
+
+          <View style={styles.placeholderImageContainer}>
+            <Image
+              source={require('../assets/test3.jpg')}
+              style={styles.placeholderImage}
+            />
+            <Text style={styles.placeholderText}>Placeholder Plant Name Three</Text>
+          </View>
+          
+          <View style={styles.placeholderImageContainer}>
+            <Image
+              source={require('../assets/test2.jpg')}
+              style={styles.placeholderImage}
+            />
+            <Text style={styles.placeholderText}>Placeholder Plant Name Four</Text>
+          </View>
+
+
+        </View>
         </View>
       );
     };
@@ -61,6 +84,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+      paddingTop: 100, 
     },
     logo: {
       width: 100, // Adjust the width as needed
@@ -84,21 +108,35 @@ const styles = StyleSheet.create({
     buttonText:{
       color: "#0B4D21",
     },
+
+    
     placeholderContainer: {
-      width: '50%', // Display two side by side, so take 50% of the width
+      flexDirection: 'row', 
+      flexWrap: 'wrap',
+      justifyContent: 'center', // Center items horizontally
+    paddingVertical: 10,
+      justifyContent: 'space-between', 
+    },
+
+    
+    placeholderImageContainer: {
+      width: '50%', // Adjust the width as needed
+      marginBottom: 10, // Add some space between rows
+      display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
     },
     placeholderImage: {
-      width: '100%', // Take up the full width
-      aspectRatio: 1, // Maintain a 1:1 aspect ratio for square images
-      borderWidth: 1,
-      borderColor: 'gray',
+      width: 160,
+      height: 160,
+      aspectRatio: 1, 
       borderRadius: 10,
     },
     placeholderText: {
       marginTop: 10,
-      fontSize: 16,
+      fontSize: 12,
       fontWeight: 'bold',
+      textAlign: 'center', 
+      width: 160,
+
     },
   });
