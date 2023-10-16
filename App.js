@@ -10,6 +10,7 @@ import RegisterScreen from './Screens/RegisterScreen';
 import TestScreen from './Screens/TestScreen';
 import NewScreen from './Screens/NewScreen';
 import LogInScreen from './Screens/LogInScreen';
+import ScanScreen from "./Screens/ScanScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +21,8 @@ const TabNavigator = () => {
       <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ headerTitle: '' }}/>
       <Tab.Screen name="TestScreen" component={TestScreen} />
       <Tab.Screen name="NewScreen" component={NewScreen} />
+      <Tab.Screen name="ScanScreen" component={ScanScreen} />
+
     </Tab.Navigator>
   );
 };

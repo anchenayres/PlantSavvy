@@ -2,12 +2,16 @@ import React from 'react';
 import {StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getAuth, signOut } from 'firebase/auth';
+import { useRoute } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 const auth = getAuth();
 
 
 const HomeScreen = ({ navigation }) => {
+  const route = useRoute();
+  const plantData = route.params ? route.params.plantData : null;
+
     const handleLogout = async () => {
       try {
         await signOut(auth);
@@ -33,8 +37,15 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.heading}>My Plants</Text>
 
         <View style={styles.placeholderContainer}>
-          <View style={styles.placeholderImage} />
-          <Text style={styles.placeholderText}>Placeholder Plant</Text>
+          <View style={styles.placeholderImage}>
+          {plantData && (
+            <View>
+              <Image source={{ uri: plantData.image }} style={styles.plantImage} />
+              <Text>{plantData.name}</Text>
+            </View>
+          )}
+          </View>
+          <Text style={styles.placeholderText}>Placeholder Plant Name</Text>
         </View>
 
         </View>
@@ -52,11 +63,11 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     logo: {
-      width: 200, // Adjust the width as needed
+      width: 100, // Adjust the width as needed
       height: 150, // Adjust the height as needed
       position: 'absolute',
-      left: -45, 
-      top: -10,
+      left: 0, 
+      top: -30,
     },
     heading:{
         fontWeight: 'bold',
