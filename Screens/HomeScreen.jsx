@@ -60,21 +60,6 @@ const HomeScreen = () => {
             <Text style={styles.placeholderText}>Placeholder Plant Name Two</Text>
           </View>
 
-          <View style={styles.placeholderImageContainer}>
-            <Image
-              source={require('../assets/test3.jpg')}
-              style={styles.placeholderImage}
-            />
-            <Text style={styles.placeholderText}>Placeholder Plant Name Three</Text>
-          </View>
-          
-          <View style={styles.placeholderImageContainer}>
-            <Image
-              source={require('../assets/test2.jpg')}
-              style={styles.placeholderImage}
-            />
-            <Text style={styles.placeholderText}>Placeholder Plant Name Four</Text>
-          </View>
 
 
         </View>

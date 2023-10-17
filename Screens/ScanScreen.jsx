@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, StyleSheet } from 'react-native';
-
-import ImagePicker from 'react-native-image-picker';
+import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
 const ScanScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [plantData, setPlantData] = useState(null);
-
-  const handleImagePicker = () => {
-    const options = {
-      title: 'Select an Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
+  const [image, setImage] = useState(null);
+  
+    const pickImage = async () => {
+      // No permissions request is necessary for launching the image library
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      console.log(result);
+  
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
     };
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        sendImageToAPI(response.uri);
-        setSelectedImage(response.uri);
-      }
-    });
-  };
 
+  
   const sendImageToAPI = (imageUri) => {
     const apiUrl = 'https://plant.id/api/v3/identification'; 
 
@@ -56,18 +53,17 @@ const ScanScreen = () => {
   };
 
   return (
-<View style={styles.container}>
-      {selectedImage && (
-        <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
-      )}
-      {plantData && (
-        <View>
-          <Image source={{ uri: plantData.image }} style={styles.plantImage} />
-          <Text>{plantData.name}</Text>
-        </View>
-      )}
-      <Button title="Select an Image" onPress={handleImagePicker} />
-    </View>  );
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <TouchableOpacity
+        style={styles.selectImage}
+        onPress={pickImage}
+      >
+        <Text style={styles.buttonText}>Select an image from your camera roll. 
+        Please make sure the photo clearly shows the plant for optimal results.</Text>
+      </TouchableOpacity>
+      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+    </View>    
+    );
 };
 
 const styles = StyleSheet.create({
@@ -85,6 +81,18 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: 'contain',
+  },
+  selectImage: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 5,
+    width: 300,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#0B4D21',
+    textAlign: 'center',
   },
 });
 

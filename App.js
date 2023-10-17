@@ -11,7 +11,6 @@ import TestScreen from './Screens/TestScreen';
 import NewScreen from './Screens/NewScreen';
 import LogInScreen from './Screens/LogInScreen';
 import ScanScreen from "./Screens/ScanScreen";
-import PlantDetailScreen from "./Screens/plantDetailScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -53,7 +52,6 @@ export default function App() {
                <>
                 <Stack.Screen name="LogInScreen" component={LogInScreen} />
                 <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-                <Stack.Screen name="PlantDetailScreen" component={PlantDetailScreen} />
                </>
             )}
           </Stack.Navigator>
