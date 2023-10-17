@@ -27,13 +27,15 @@ const HomeScreen = () => {
   
     //navigate to plantDetailScreen
     
-    const handleDetailPlantNavigation = (plantId) => {
-      navigation.navigate('PlantDetailScreen', {plantId});
+    const handleDetailPlantNavigation = (plantId, imageUri, plantName) => {
+      navigation.navigate('PlantDetailScreen', {plantId, imageUri, plantName});
     };
 
-    const { imageUri, plantName, plantId } = route.params;
-
-
+    const { imageUri, plantName, plantId } = route.params || {};
+    useEffect(() => {
+      
+      console.log('route.params:', route.params);
+    }, []);
    
 
     return (

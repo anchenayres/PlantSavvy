@@ -4,7 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { identifyPlant } from "../Services/PlantIdService";
 
-
 const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
@@ -15,16 +14,16 @@ const ScanScreen = () => {
 
   const handleImagePick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync();
+    
     console.log(result);
   
     if (!result.canceled) {
-      const imageUri = result.uri;   
-      setImageUri(imageUri);   
-      const identificationResponse = await identifyPlant(imageUri);
+      const pickedImageUri = result.uri;
+      setImageUri(pickedImageUri);
+      const identificationResponse = await identifyPlant(pickedImageUri);
       const plantName = identificationResponse?.result?.classification?.suggestions[0]?.name;
       const plantId = identificationResponse?.result?.classification?.suggestions[0]?.id;
-      handlePlantSelection(imageUri, plantName, plantId);
-    }
+      handlePlantSelection(pickedImageUri, plantName, plantId);    }
   };
 
   return (

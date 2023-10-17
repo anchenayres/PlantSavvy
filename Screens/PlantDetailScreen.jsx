@@ -3,15 +3,15 @@ import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
 const PlantDetailScreen = ({ route }) => {
-  const { plantData } = route.params;
-
-  //navigate from home to here:
-  const route = useRoute();
-  const { plantId } = route.params;
+  const { plantId, imageUri, plantName } = route.params;
   
   return (
-    <Text>Details for Plant ID: {plantId}</Text>
 
+    <View style={styles.container}>
+    <Text>Details for Plant ID: {plantId}</Text>
+    <Image source={{ uri: imageUri }} style={styles.plantImage} />
+      <Text style={styles.plantName}>{plantName}</Text>
+      </View>
 //<ScrollView style={styles.container}>
 //<Image source={{ uri: plantData.image }} style={styles.plantImage} />
 //<Text style={styles.plantName}>{plantData.name}</Text>
