@@ -3,6 +3,7 @@ import {db} from "../firebase";
 
 import { createUserInDb } from "../Services/firebaseDb";
 
+
 //user collection
 export const registerUser = async (username, email, uid) => {
     try {
@@ -18,3 +19,18 @@ export const registerUser = async (username, email, uid) => {
 
     createUserInDb(username, email, uid);
 }
+
+const getUserImages = async (userUid) => {
+    try {
+      const imagesQuery = query(collection(db, "images"), where("user_id", "==", userUid));
+      const imageSnapshot = await getDocs(imagesQuery);
+      const userImages = [];
+      imageSnapshot.forEach((doc) => {
+        userImages.push(doc.data());
+      });
+      return userImages;
+    } catch (error) {
+      console.error("Error retrieving user images: " + error);
+      return [];
+    }
+  };

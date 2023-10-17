@@ -9,7 +9,11 @@ const ScanScreen = () => {
   const [imageUri, setImageUri] = useState(null);
 
   const handlePlantSelection = async (imageUri, plantName, plantId) => {
-    navigation.navigate('HomeScreen', { imageUri, plantName, plantId });
+    navigation.navigate('HomeScreen', {
+      imageUri: pickedImageUri,
+      plantName: plantName,
+      plantId: plantId,
+    });
   };
 
   const handleImagePick = async () => {
@@ -18,12 +22,13 @@ const ScanScreen = () => {
     console.log(result);
   
     if (!result.canceled) {
-      const pickedImageUri = result.uri;
+      const pickedImageUri = result.assets[0].uri;
       setImageUri(pickedImageUri);
       const identificationResponse = await identifyPlant(pickedImageUri);
       const plantName = identificationResponse?.result?.classification?.suggestions[0]?.name;
       const plantId = identificationResponse?.result?.classification?.suggestions[0]?.id;
-      handlePlantSelection(pickedImageUri, plantName, plantId);    }
+      handlePlantSelection(pickedImageUri, plantName, plantId);    
+    }
   };
 
   return (
