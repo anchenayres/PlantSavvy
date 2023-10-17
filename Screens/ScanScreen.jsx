@@ -1,70 +1,45 @@
 import React, { useState } from 'react';
 import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { identifyPlant } from "../Services/PlantIdService";
+
 
 const ScanScreen = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [plantData, setPlantData] = useState(null);
-  const [image, setImage] = useState(null);
-  
-    const pickImage = async () => {
-      // No permissions request is necessary for launching the image library
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-  
-      console.log(result);
-  
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-      }
-    };
+  const navigation = useNavigation();
+  const [imageUri, setImageUri] = useState(null);
 
+  const handlePlantSelection = async (imageUri, plantName, plantId) => {
+    navigation.navigate('HomeScreen', { imageUri, plantName, plantId });
+  };
 
+  const handleImagePick = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync();
+    console.log(result);
   
-  const sendImageToAPI = (imageUri) => {
-    const apiUrl = 'https://plant.id/api/v3/identification'; 
-
-    // Create a FormData object and append the image to it
-    const formData = new FormData();
-    formData.append('image', {
-      uri: imageUri,
-      type: 'image/jpeg',
-      name: 'image.jpg',
-    });
-
-    axios
-      .post(apiUrl, formData)
-      .then((response) => {
-        // Handle the API response and extract relevant data
-        const { input, result } = response.data;
-        if (input && result && result.classification && result.classification.suggestions.length > 0) {
-          const { name } = result.classification.suggestions[0];
-          setPlantData({ image: imageUri, name });
-        }
-      })
-      .catch((error) => {
-        console.error('API Error:', error);
-      });
+    if (!result.canceled) {
+      const imageUri = result.uri;   
+      setImageUri(imageUri);   
+      const identificationResponse = await identifyPlant(imageUri);
+      const plantName = identificationResponse?.result?.classification?.suggestions[0]?.name;
+      const plantId = identificationResponse?.result?.classification?.suggestions[0]?.id;
+      handlePlantSelection(imageUri, plantName, plantId);
+    }
   };
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity
         style={styles.selectImage}
-        onPress={pickImage}
+        onPress={handleImagePick}
       >
         <Text style={styles.buttonText}>Select an image from your camera roll. 
         Please make sure the photo clearly shows the plant for optimal results.</Text>
       </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+      {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
     </View>    
     );
-};
+  }
 
 const styles = StyleSheet.create({
   container: {

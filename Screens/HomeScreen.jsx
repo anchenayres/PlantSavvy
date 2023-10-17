@@ -25,6 +25,16 @@ const HomeScreen = () => {
       navigation.navigate('ScanScreen');
     };
   
+    //navigate to plantDetailScreen
+    
+    const handleDetailPlantNavigation = (plantId) => {
+      navigation.navigate('PlantDetailScreen', {plantId});
+    };
+
+    const { imageUri, plantName, plantId } = route.params;
+
+
+   
 
     return (
         <View style={styles.container}>
@@ -43,26 +53,15 @@ const HomeScreen = () => {
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
 
-        <View style={styles.placeholderContainer}>
-                <View style={styles.placeholderImageContainer}>
-            <Image
-              source={require('../assets/test.jpg')}
-              style={styles.placeholderImage}
-            />
-            <Text style={styles.placeholderText}>Placeholder Plant Name One</Text>
-          </View>
-
-          <View style={styles.placeholderImageContainer}>
-            <Image
-              source={require('../assets/test4.jpg')}
-              style={styles.placeholderImage}
-            />
-            <Text style={styles.placeholderText}>Placeholder Plant Name Two</Text>
-          </View>
-
-
-
+        {imageUri && (
+        <View style={styles.placeholderImageContainer}>
+          <TouchableOpacity onPress={() => handleDetailPlantNavigation(plantId)}>
+            <Image source={{ uri: imageUri }} style={styles.placeholderImage} />
+            <Text style={styles.placeholderText}>{plantName}</Text>
+          </TouchableOpacity>
         </View>
+      )}
+
         </View>
       );
     };
