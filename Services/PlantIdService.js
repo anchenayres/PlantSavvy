@@ -1,7 +1,7 @@
 import axios from "axios";
 import Config from "react-native-config";
 
-const apiUrl = "https://api.plant.id/v2/identify";
+const apiUrl = "https://plant.id/api/v3/identification";
 const apiKey = Config.PLANT_ID_API_KEY;
 
 export const identifyPlant = (accessToken, latitude, longitude, imageUri, datetime) => {

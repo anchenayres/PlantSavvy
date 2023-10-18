@@ -29,13 +29,19 @@ const HomeScreen = () => {
     
     const handleDetailPlantNavigation = (plantId, imageUri, plantName) => {
       navigation.navigate('PlantDetailScreen', {plantId, imageUri, plantName});
+      console.log(handleDetailPlantNavigation)
     };
 
     const { imageUri, plantName, plantId } = route.params || {};
     useEffect(() => {
-      
-      console.log('route.params:', route.params);
-    }, []);
+      if (imageUri && plantName && plantId) {
+        // Now you can use the values
+        console.log('Image URI:', imageUri);
+        console.log('Plant Name:', plantName);
+        console.log('Plant ID:', plantId);
+      }
+      //console.log('route.params:', route.params);
+    }, [imageUri, plantName, plantId]);
    
 
     return (
