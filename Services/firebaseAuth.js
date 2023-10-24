@@ -3,7 +3,16 @@ import {auth} from "../firebase";
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
-
+let userEmail = '';
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // If the user is logged in, set the userEmail to the user's email
+    userEmail = user.email;
+  } else {
+    // If the user is logged out, set userEmail to an empty string
+    userEmail = '';
+  }
+});
 
 //register new
 const registerNewUser = (email, password) => {
@@ -47,4 +56,5 @@ const signOutUser = () => {
     });
 };
 
-export { registerNewUser, signInUser, signOutUser };
+
+export { userEmail, registerNewUser, signInUser, signOutUser };
