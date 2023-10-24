@@ -15,10 +15,14 @@ import ScanScreen from "./Screens/ScanScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
+const TabNavigator = (uploadedImages) => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ headerTitle: '' }}/>
+      <Tab.Screen name="HomeScreen"
+      component={HomeScreen}
+      initialParams={{uploadedImages}}
+      options={{headerTitle: ''}}
+      />
       <Tab.Screen name="TestScreen" component={TestScreen} />
       <Tab.Screen name="NewScreen" component={NewScreen} />
       <Tab.Screen name="ScanScreen" component={ScanScreen} />

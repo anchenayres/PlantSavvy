@@ -1,6 +1,7 @@
 import {collection, addDoc } from "firebase/firestore";
 import {db} from "../firebase";
 
+
 import { createUserInDb } from "../Services/firebaseDb";
 
 
@@ -20,17 +21,18 @@ export const registerUser = async (username, email, uid) => {
     createUserInDb(username, email, uid);
 }
 
-const getUserImages = async (userUid) => {
-    try {
-      const imagesQuery = query(collection(db, "images"), where("user_id", "==", userUid));
-      const imageSnapshot = await getDocs(imagesQuery);
-      const userImages = [];
-      imageSnapshot.forEach((doc) => {
-        userImages.push(doc.data());
-      });
-      return userImages;
-    } catch (error) {
-      console.error("Error retrieving user images: " + error);
-      return [];
-    }
-  };
+//images collection
+const addImageToCollection = async (imageUrl, userId) => {
+  try {
+    const docRef = await addDoc(collection(db, 'images'), {
+      image_url: imageUrl,
+      user_id: userId,
+    });
+
+    console.log('Image added with ID: ', docRef.id);
+  } catch (error) {
+    console.error('Error adding image: ', error);
+  }
+};
+
+export { db, addImageToCollection };

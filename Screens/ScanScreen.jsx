@@ -2,35 +2,41 @@ import React, { useState } from 'react';
 import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
-import { identifyPlant } from "../Services/PlantIdService";
+import { addImageToCollection } from "../Services/firebaseDb";
 
 const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
 
-  const handlePlantSelection = async (imageUri, plantName, plantId) => {
-    navigation.navigate('HomeScreen', {
-      imageUri: pickedImageUri,
-      plantName: plantName,
-      plantId: plantId,
-    });
-  };
-
-  const handleImagePick = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync();
+//navigate plant url to home screen
+const handleConfirm = async () => {
+  if (imageUri) {
+    try {
+      // Add the image to the Firestore collection
+      await addImageToCollection(imageUri, 'USER_ID');
+    } catch (error) {
+      console.error('Error adding image to Firestore: ', error);
+    }
     
-    console.log(result);
-  
+    setImageUri(null);
+  }
+};
+
+
+const handleImagePick = async () => {
+  try {
+    const result = await ImagePicker.launchImageLibraryAsync();
+
     if (!result.canceled) {
       const pickedImageUri = result.assets[0].uri;
       setImageUri(pickedImageUri);
-      const identificationResponse = await identifyPlant(pickedImageUri);
-      const plantName = identificationResponse?.result?.classification?.suggestions[0]?.name;
-      const plantId = identificationResponse?.result?.classification?.suggestions[0]?.id;
-      handlePlantSelection(pickedImageUri, plantName, plantId);    
     }
-  };
-
+  } catch (error) {
+    console.error('Error while picking an image:', error);
+  }
+};
+  
+  
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity
@@ -41,6 +47,9 @@ const ScanScreen = () => {
         Please make sure the photo clearly shows the plant for optimal results.</Text>
       </TouchableOpacity>
       {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
+      {imageUri && (
+         <Button title="Confirm" onPress={handleConfirm} />
+      )}
     </View>    
     );
   }

@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-na
 import { getAuth, signOut } from 'firebase/auth';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { identifyPlant } from "../Services/PlantIdService";
 
 const auth = getAuth();
 
@@ -11,6 +12,17 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const { imageUri } = route.params || {};
+  const { uploadedImages } = route.params || [];
+
+  // Check if 'imageUri' exists before using it
+  if (imageUri) {
+    // Now you can use 'imageUri'
+    console.log('Image URI:', imageUri);
+  }
+
+    //navigate to plantDetailScreen
+   
     const handleLogout = async () => {
       try {
         await signOut(auth);
@@ -25,23 +37,7 @@ const HomeScreen = () => {
       navigation.navigate('ScanScreen');
     };
   
-    //navigate to plantDetailScreen
     
-    const handleDetailPlantNavigation = (plantId, imageUri, plantName) => {
-      navigation.navigate('PlantDetailScreen', {plantId, imageUri, plantName});
-      console.log(handleDetailPlantNavigation)
-    };
-
-    const { imageUri, plantName, plantId } = route.params || {};
-    useEffect(() => {
-      if (imageUri && plantName && plantId) {
-        // Now you can use the values
-        console.log('Image URI:', imageUri);
-        console.log('Plant Name:', plantName);
-        console.log('Plant ID:', plantId);
-      }
-      //console.log('route.params:', route.params);
-    }, [imageUri, plantName, plantId]);
    
 
     return (
@@ -61,15 +57,9 @@ const HomeScreen = () => {
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
 
-        {imageUri && (
-        <View style={styles.placeholderImageContainer}>
-          <TouchableOpacity onPress={() => handleDetailPlantNavigation(plantId)}>
-            <Image source={{ uri: imageUri }} style={styles.placeholderImage} />
-            <Text style={styles.placeholderText}>{plantName}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
+        {Array.isArray(uploadedImages) && uploadedImages.map((imageUri, index) => (
+          <Image key={index} source={{ uri: imageUri }} style={styles.uploadedImage} />
+        ))}
         </View>
       );
     };
@@ -113,6 +103,12 @@ const styles = StyleSheet.create({
     },
     buttonText:{
       color: "#0B4D21",
+    },
+
+    uploadedImage:{
+      width: 160,
+      height: 160,
+
     },
 
     
