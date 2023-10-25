@@ -23,8 +23,6 @@ export const registerUser = async (username, email, uid) => {
 }
 
 //images collection
-
-
 const addImageToCollection = async (imageUrl, userEmail) => {
   try {
     const docRef = await addDoc(collection(db, 'images'), {

@@ -3,13 +3,13 @@ import {auth} from "../firebase";
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
+//image saving in images collection
 let userEmail = '';
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // If the user is logged in, set the userEmail to the user's email
     userEmail = user.email;
   } else {
-    // If the user is logged out, set userEmail to an empty string
     userEmail = '';
   }
 });

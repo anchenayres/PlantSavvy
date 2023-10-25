@@ -3,6 +3,7 @@ import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-n
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { addImageToCollection } from "../Services/firebaseDb";
+import { userEmail } from '../Services/firebaseAuth';
 
 const ScanScreen = () => {
   const navigation = useNavigation();
@@ -13,7 +14,7 @@ const handleConfirm = async () => {
   if (imageUri) {
     try {
       // Add the image to the Firestore collection
-      await addImageToCollection(imageUri, 'USER_ID');
+      await addImageToCollection(imageUri, userEmail);
     } catch (error) {
       console.error('Error adding image to Firestore: ', error);
     }
