@@ -4,40 +4,48 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { addImageToCollection } from "../Services/firebaseDb";
 import { userEmail } from '../Services/firebaseAuth';
+import { useUserEmail } from '../Services/firebaseAuth';
+
+
+
 
 const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
 
-//navigate plant url to home screen
-const handleConfirm = async () => {
-  if (imageUri) {
-    console.log("User Email: " + userEmail);
+  const userEmail = useUserEmail();
+
+  const handleImagePick = async () => {
     try {
-      // Add the image to the Firestore collection
-      await addImageToCollection(imageUri, userEmail);
-    } catch (error) {
-      console.error('Error adding image to Firestore: ', error);
-    }
-    
-    setImageUri(null);
-  }
-};
-
-
-const handleImagePick = async () => {
-  try {
-    const result = await ImagePicker.launchImageLibraryAsync();
-
-    if (!result.canceled) {
-      const pickedImageUri = result.assets[0].uri;
-      setImageUri(pickedImageUri);
-    }
-  } catch (error) {
-    console.error('Error while picking an image:', error);
-  }
-};
+      const result = await ImagePicker.launchImageLibraryAsync();
   
+      if (!result.canceled) {
+        const pickedImageUri = result.assets[0].uri;
+        setImageUri(pickedImageUri);
+      }
+    } catch (error) {
+      console.error('Error while picking an image:', error);
+    }
+  };
+    
+
+  //navigate plant url to home screen
+  const handleConfirm = async () => {
+    if (imageUri) {
+      console.log("User Email: " + userEmail);
+
+      try {
+        // Add the image to the Firestore collection
+        await addImageToCollection(imageUri, userEmail);
+      } catch (error) {
+        console.error('Error adding image to Firestore: ', error);
+      }
+      
+      setImageUri(null);
+    }
+  };
+
+
   
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

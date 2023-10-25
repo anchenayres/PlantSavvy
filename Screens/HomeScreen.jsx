@@ -6,10 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {useUserEmail} from '../Services/firebaseAuth';
 import { fetchUserImages } from '../Services/firebaseDb';
 
-
 //import { identifyPlant } from "../Services/PlantIdService";
-//import { db } from '../firebase';
-
 
 //displaying images of user logged in
 const auth = getAuth();
@@ -21,14 +18,18 @@ const HomeScreen = () => {
 
   // Get the logged-in user's email
   const userEmail = useUserEmail();
-  const [userImages, setUserImages] = useState([]);
+  //const [userImages, setUserImages] = useState([]);
+  const [images, setImages] = useState([]);
+
 
   useEffect(() => {
-    // Fetch the user's images when the component mounts
+    const getImages = async () => {
+      const userImages = await fetchUserImages(userEmail);
+      setImages(userImages);
+    };
+
     if (userEmail) {
-      fetchUserImages(userEmail).then((images) => {
-        setUserImages(images);
-      });
+      getImages();
     }
   }, [userEmail]);
 
@@ -64,18 +65,31 @@ const HomeScreen = () => {
         source={require("../assets/plantLogo2.png")} // Check the path to your image
         style={styles.logo}
         />        
-
+<View>
         <Text style={styles.heading}>My Plants</Text>
         <TouchableOpacity onPress={handleScanNavigation}>
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
-            
-        <ScrollView horizontal>
-        {userImages.map((image, index) => (
-          <Image key={index} source={{ uri: image }} style={{ width: 200, height: 200 }} />
-        ))}
-      </ScrollView>
 
+        <ScrollView style={{ marginTop: 20 }}>
+          {images.map((image, index) => (
+            index % 2 === 0 ? (
+              <View key={index} style={styles.imageRow}>
+                <Image
+                  source={{ uri: image }}
+                  style={styles.image}
+                />
+                {images[index + 1] && (
+                  <Image
+                    source={{ uri: images[index + 1] }}
+                    style={styles.image}
+                  />
+                )}
+              </View>
+            ) : null
+          ))}
+        </ScrollView>
+        </View>
       </View>
       );
     };
@@ -91,6 +105,20 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       paddingTop: 100, 
     },
+    imageRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginVertical: 10,
+    },
+    image: {
+      width: 150,
+      height: 150,
+      margin: 15,
+      marginTop: 15,
+
+      borderRadius:20,
+    },
     logo: {
       width: 100, // Adjust the width as needed
       height: 150, // Adjust the height as needed
@@ -100,15 +128,15 @@ const styles = StyleSheet.create({
     },
 
     addIcon: {
-      marginTop: -55, 
-      marginLeft: -50, 
+      marginTop: 15, 
+      marginLeft: 150, 
 
     },
 
     heading:{
         fontWeight: 'bold',
         fontSize: 20,
-        top: 150,
+        top: 20,
         left: 30,
         position: 'absolute',
       },
@@ -124,7 +152,6 @@ const styles = StyleSheet.create({
     uploadedImage:{
       width: 160,
       height: 160,
-
     },
 
     
