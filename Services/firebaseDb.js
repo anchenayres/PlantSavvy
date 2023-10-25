@@ -1,4 +1,4 @@
-import {collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import {db} from "../firebase";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { userEmail } from '../Services/firebaseAuth';
@@ -53,6 +53,5 @@ const fetchUserImages = async (userEmail) => {
 
   return userImages;
 };
-
 
 export { db, addImageToCollection, fetchUserImages };

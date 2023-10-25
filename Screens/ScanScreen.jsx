@@ -12,6 +12,7 @@ const ScanScreen = () => {
 //navigate plant url to home screen
 const handleConfirm = async () => {
   if (imageUri) {
+    console.log("User Email: " + userEmail);
     try {
       // Add the image to the Firestore collection
       await addImageToCollection(imageUri, userEmail);

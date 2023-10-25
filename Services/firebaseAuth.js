@@ -1,18 +1,33 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from "firebase/auth";
-import {auth} from "../firebase";
-import { useEffect } from 'react';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase'; 
+
+//const initializedAuth = initializeAuth(auth, {
+  //persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+//});
 
 //image saving in images collection
-let userEmail = '';
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    userEmail = user.email;
-  } else {
-    userEmail = '';
-  }
-});
+const useUserEmail = () => {
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail("");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  return userEmail;
+};
 
 //register new
 const registerNewUser = (email, password) => {
@@ -56,5 +71,4 @@ const signOutUser = () => {
     });
 };
 
-
-export { userEmail, registerNewUser, signInUser, signOutUser };
+export { useUserEmail, registerNewUser, signInUser, signOutUser };

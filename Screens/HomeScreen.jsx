@@ -1,8 +1,12 @@
 import React, { useState, useEffect }from 'react';
-import {StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
+import {StyleSheet, Text, View, Button, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import {useUserEmail} from '../Services/firebaseAuth';
+import { fetchUserImages } from '../Services/firebaseDb';
+
+
 //import { identifyPlant } from "../Services/PlantIdService";
 //import { db } from '../firebase';
 
@@ -15,9 +19,22 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  
-    //navigate to plantDetailScreen
+  // Get the logged-in user's email
+  const userEmail = useUserEmail();
+  const [userImages, setUserImages] = useState([]);
+
+  useEffect(() => {
+    // Fetch the user's images when the component mounts
+    if (userEmail) {
+      fetchUserImages(userEmail).then((images) => {
+        setUserImages(images);
+      });
+    }
+  }, [userEmail]);
+
    
+
+  //logout from homescreen
     const handleLogout = async () => {
       try {
         await signOut(auth);
@@ -33,7 +50,8 @@ const HomeScreen = () => {
     };
   
     
-   
+  //navigate to plantDetailScreen NEED TO DO
+
 
     return (
         <View style={styles.container}>
@@ -52,6 +70,12 @@ const HomeScreen = () => {
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
             
+        <ScrollView horizontal>
+        {userImages.map((image, index) => (
+          <Image key={index} source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        ))}
+      </ScrollView>
+
       </View>
       );
     };
