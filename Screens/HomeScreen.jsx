@@ -3,8 +3,11 @@ import {StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-na
 import { getAuth, signOut } from 'firebase/auth';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { identifyPlant } from "../Services/PlantIdService";
+//import { identifyPlant } from "../Services/PlantIdService";
+//import { db } from '../firebase';
 
+
+//displaying images of user logged in
 const auth = getAuth();
 
 
@@ -12,15 +15,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { imageUri } = route.params || {};
-  const { uploadedImages } = route.params || [];
-
-  // Check if 'imageUri' exists before using it
-  if (imageUri) {
-    // Now you can use 'imageUri'
-    console.log('Image URI:', imageUri);
-  }
-
+  
     //navigate to plantDetailScreen
    
     const handleLogout = async () => {
@@ -56,11 +51,8 @@ const HomeScreen = () => {
         <TouchableOpacity onPress={handleScanNavigation}>
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
-
-        {Array.isArray(uploadedImages) && uploadedImages.map((imageUri, index) => (
-          <Image key={index} source={{ uri: imageUri }} style={styles.uploadedImage} />
-        ))}
-        </View>
+            
+      </View>
       );
     };
 

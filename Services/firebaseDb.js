@@ -36,4 +36,23 @@ const addImageToCollection = async (imageUrl, userEmail) => {
   }
 };
 
-export { db, addImageToCollection };
+//images showcase
+const fetchUserImages = async (userEmail) => {
+  const q = query(
+    collection(db, 'images'),
+    where('user_email', '==', userEmail)
+  );
+
+  const querySnapshot = await getDocs(q);
+  const userImages = [];
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    userImages.push(data.image_url);
+  });
+
+  return userImages;
+};
+
+
+export { db, addImageToCollection, fetchUserImages };
