@@ -51,8 +51,10 @@ const HomeScreen = () => {
     };
   
     
-  //navigate to plantDetailScreen NEED TO DO
-
+    //navigate to plantDetailScreen NEED TO DO
+    const handlePlantDetailNavigation = (imageUri) => {
+      navigation.navigate('PlantDetailScreen', {imageUri});
+    };
 
     return (
         <View style={styles.container}>
@@ -72,23 +74,15 @@ const HomeScreen = () => {
         </TouchableOpacity>
 
         <ScrollView style={{ marginTop: 20 }}>
-          {images.map((image, index) => (
-            index % 2 === 0 ? (
-              <View key={index} style={styles.imageRow}>
-                <Image
-                  source={{ uri: image }}
-                  style={styles.image}
-                />
-                {images[index + 1] && (
-                  <Image
-                    source={{ uri: images[index + 1] }}
-                    style={styles.image}
-                  />
-                )}
-              </View>
-            ) : null
-          ))}
-        </ScrollView>
+        {images.map((image, index) => (
+          <TouchableOpacity key={index} onPress={handlePlantDetailNavigation}>
+            <Image
+              source={{ uri: image }}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
         </View>
       </View>
       );

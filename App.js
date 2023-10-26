@@ -11,6 +11,7 @@ import TestScreen from './Screens/TestScreen';
 import NewScreen from './Screens/NewScreen';
 import LogInScreen from './Screens/LogInScreen';
 import ScanScreen from "./Screens/ScanScreen";
+import PlantDetailScreen from './Components/plantDetailScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -18,10 +19,13 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = (uploadedImages) => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="HomeScreen"
+      <Tab.Screen 
+      name="HomeScreen"
       component={HomeScreen}
       initialParams={{uploadedImages}}
-      options={{headerTitle: ''}}
+      options={{
+        headerTitle: '',
+      }}
       />
       <Tab.Screen name="TestScreen" component={TestScreen} />
       <Tab.Screen name="NewScreen" component={NewScreen} />
@@ -51,13 +55,14 @@ export default function App() {
     <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {loggedIn ? (
-             <Stack.Screen name="HomeScreen" component={TabNavigator} />
+             <Stack.Screen name="OuterHomeScreen" component={TabNavigator} />
              ) : (
                <>
                 <Stack.Screen name="LogInScreen" component={LogInScreen} />
                 <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                </>
             )}
+             <Stack.Screen name="PlantDetailScreen" component={PlantDetailScreen} />
           </Stack.Navigator>
     </NavigationContainer>
   );
