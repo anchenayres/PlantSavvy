@@ -1,44 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
 import { identifyPlant } from '../Services/PlantIdService';
 
 const PlantDetailScreen = ({ route }) => {
-  const { imageBase64, latitude, longitude } = route.params;
-
+  console.log(route.params)
+  
+  const { imageBase64, latitude, longitude, imageUri } = route.params;
+  const [plantDetails, setPlantDetails] = useState(null);
   const [identificationResult, setIdentificationResult] = useState(null);
 
   useEffect(() => {
-    // Call the identification function when the component mounts
-    identifyPlant(imageBase64, latitude, longitude)
-      .then((result) => {
-        setIdentificationResult(result);
-      })
-      .catch((error) => {
-        console.error('Error identifying plant:', error);
-      });
+    console.log('PlantDetailScreen component is rendered.');
+
+    if (imageBase64 && latitude && longitude) {
+      identifyPlant(imageBase64, latitude, longitude)
+        .then((result) => {
+          setIdentificationResult(result);
+          console.log('Identification Result:', identificationResult);
+        })
+        .catch((error) => {
+          console.error('Error identifying plant:', error);
+        });
+    }
+
   }, [imageBase64, latitude, longitude]);
 
+  useEffect(() => {
 
-
-
-
-
-
+    console.log('PlantDetailScreen component is rendered.');
+    if (imageBase64 && latitude && longitude && plantDetails) {
+    }
+    
+  }, [imageBase64, latitude, longitude, plantDetails]);
 
   return (
 <ScrollView>
-      <View>
-        <Text>Plant Name: {identificationResult?.result?.classification?.suggestions[0]?.name}</Text>
-        <Image source={{ uri: identificationResult?.result?.images[0] }} style={{ width: 200, height: 200 }} />
-        <Text>Probability: {identificationResult?.result?.classification?.suggestions[0]?.probability}</Text>
-        <Text>Plant Description: [Your description data here]</Text>
-      </View>
+      {plantDetails ? (
+        <>
+          <Text>Plant Name: {plantDetails.commonName}</Text>
+          <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
+          <Text>Probability: {plantDetails.scientificName}</Text>
+          <Text>Plant Description: {plantDetails.description}</Text>
+        </>
+      ) : (
+        <Text>Loading plant details...</Text>
+      )}
+    </ScrollView>
 
-      {identificationResult?.result?.classification?.suggestions[0]?.similar_images?.map((image) => (
-        <Image key={image.id} source={{ uri: image.url }} style={{ width: 200, height: 200 }} />
-      ))}
-    </ScrollView>  );
+
+    )
 };
+  
 
 const styles = StyleSheet.create({
   container: {
@@ -48,7 +60,7 @@ const styles = StyleSheet.create({
   },
   plantImage: {
     width: '100%',
-    aspectRatio: 4 / 3, // Adjust the aspect ratio to match your images
+    aspectRatio: 4 / 3, 
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 10,

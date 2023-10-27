@@ -1,14 +1,17 @@
 import React, { useState, useEffect }from 'react';
 import {StyleSheet, Text, View, Button, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { getAuth, signOut } from 'firebase/auth';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import {useUserEmail} from '../Services/firebaseAuth';
 import { fetchUserImages } from '../Services/firebaseDb';
+import { useNavigation } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
+import RNFS from 'react-native-fs'; //convert to base64 image
 
-//import { identifyPlant } from "../Services/PlantIdService";
+//get data
+import { identifyPlant } from '../Services/PlantIdService';
 
-//displaying images of user logged in
 const auth = getAuth();
 
 
@@ -54,10 +57,36 @@ const HomeScreen = () => {
   
     
     //navigate to plantDetailScreen NEED TO DO
-    const handlePlantDetailNavigation = (imageUri) => {
-      navigation.navigate('PlantDetailScreen', {imageUri});
-    };
+    const handlePlantDetailNavigation = async (imageUri, latitude, longitude) => {
+      try {
+        const imageBase64 = await FileSystem.readAsStringAsync(imageUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        
+        const plantDetails = await identifyPlant(imageBase64, latitude, longitude);
 
+        if (plantDetails) {
+          const imagesRef = collection(db, 'images');
+    
+          await addDoc(imagesRef, {
+            userEmail,
+            imageUri,
+            common_name: plantDetails.commonName,
+            scientific_name: plantDetails.scientificName,
+            description: plantDetails.description,
+            createdAt: serverTimestamp(),
+          });
+    
+          navigation.navigate('PlantDetailScreen', { imageUri, plantDetails });
+        } else {
+          console.error('Plant identification failed');
+        }
+      } catch (error) {
+        console.error('Error identifying plant:', error);
+      }
+    };
+    
+    
     return (
         <View style={styles.container}>
 
@@ -77,22 +106,21 @@ const HomeScreen = () => {
 
         
         <ScrollView style={{ marginTop: 20 }}>
-          {isLoading ? (
-            <Text>Loading images...</Text>
-          ) : images.length === 0 ? (
-            <Text>No images to display</Text>
-          ) : (
-            images.map((image, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handlePlantDetailNavigation(image)}
-              >
-                <Image source={{ uri: image }} style={styles.image} />
-              </TouchableOpacity>
-            ))
-          )}
-        </ScrollView>
-
+        {isLoading ? (
+          <Text>Loading images...</Text>
+        ) : images.length === 0 ? (
+          <Text>No images to display</Text>
+        ) : (
+          images.map((image, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handlePlantDetailNavigation(image)}
+            >
+              <Image source={{ uri: image }} style={styles.image} />
+            </TouchableOpacity>
+          ))
+        )}
+      </ScrollView>
 
         </View>
       </View>

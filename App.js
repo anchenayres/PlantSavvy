@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { auth } from './firebase';
+import { StyleSheet } from 'react-native';
+
+import { Ionicons } from '@expo/vector-icons';
+
 
 import HomeScreen from './Screens/HomeScreen';
 import RegisterScreen from './Screens/RegisterScreen';
@@ -11,7 +14,7 @@ import TestScreen from './Screens/TestScreen';
 import NewScreen from './Screens/NewScreen';
 import LogInScreen from './Screens/LogInScreen';
 import ScanScreen from "./Screens/ScanScreen";
-import PlantDetailScreen from './Components/plantDetailScreen';
+import PlantDetailScreen from "./Screens/PlantDetailScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,7 +51,7 @@ export default function App() {
         setLoggedIn(false); // User is not signed in
       }
     });
-    return unsubscribe; // Clean up the listener when the component unmounts
+    return unsubscribe;
   }, []);
 
   return (

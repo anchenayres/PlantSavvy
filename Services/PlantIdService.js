@@ -1,9 +1,8 @@
 import axios from "axios";
 import Config from "react-native-config";
 
-const apiKey = Config.PLANT_ID_API_KEY;
 
-async function identifyPlant(imageBase64, latitude, longitude, similarImages = true) {
+async function identifyPlant(imageBase64, latitude, longitude) {
   const apiUrl = 'https://plant.id/api/v3/identification';
 
   try {
@@ -13,7 +12,6 @@ async function identifyPlant(imageBase64, latitude, longitude, similarImages = t
         images: [imageBase64],
         latitude,
         longitude,
-        similar_images: similarImages,
       },
       {
         headers: {
@@ -24,10 +22,11 @@ async function identifyPlant(imageBase64, latitude, longitude, similarImages = t
     );
 
     return response.data;
-      } catch (error) {
-        console.error('Error identifying plant:', error);
-        throw error;
-      }
-    }
+  } catch (error) {
+    console.log('Plant Identification Response:', plantDetails);
+    console.error('Error identifying plant:', error);
+    return { error: 'Plant identification failed' };
+  }
+}
 
     export { identifyPlant };

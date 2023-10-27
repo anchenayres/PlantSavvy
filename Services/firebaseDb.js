@@ -23,11 +23,14 @@ export const registerUser = async (username, email, uid) => {
 }
 
 //images collection
-const addImageToCollection = async (imageUrl, userEmail) => {
+const addImageToCollection = async (imageUrl, userEmail, plantDetails) => {
   try {
     const docRef = await addDoc(collection(db, 'images'), {
       image_url: imageUrl,
       user_email: userEmail,
+      commonName: plantDetails.commonName,
+      scientificName: plantDetails.scientificName,
+      description: plantDetails.description,
     });
 
     console.log('Image added with ID: ', docRef.id);

@@ -3,8 +3,9 @@ import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-n
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { addImageToCollection } from "../Services/firebaseDb";
-import { userEmail } from '../Services/firebaseAuth';
+//import { userEmail } from '../Services/firebaseAuth';
 import { useUserEmail } from '../Services/firebaseAuth';
+import * as FileSystem from 'expo-file-system';
 
 
 
@@ -15,6 +16,9 @@ const ScanScreen = () => {
 
   const userEmail = useUserEmail();
 
+
+
+
   const handleImagePick = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync();
@@ -22,47 +26,51 @@ const ScanScreen = () => {
       if (!result.canceled) {
         const pickedImageUri = result.assets[0].uri;
         setImageUri(pickedImageUri);
-      }
-    } catch (error) {
-      console.error('Error while picking an image:', error);
-    }
-  };
-    
 
-  //navigate plant url to home screen
-  const handleConfirm = async () => {
-    if (imageUri) {
-      console.log("User Email: " + userEmail);
+      const imageBase64 = await FileSystem.readAsStringAsync(pickedImageUri, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+            console.log('Image as base64:', imageBase64);
+          }
+        } catch (error) {
+          console.error('Error while picking an image:', error);
+        }
+    };    
 
-      try {
-        // Add the image to the Firestore collection
-        await addImageToCollection(imageUri, userEmail);
-      } catch (error) {
-        console.error('Error adding image to Firestore: ', error);
+    //navigate plant url to home screen
+    const handleConfirm = async () => {
+      if (imageUri) {
+        console.log("User Email: " + userEmail);
+
+        try {
+          // Add the image to the Firestore collection
+          await addImageToCollection(imageUri, userEmail);
+        } catch (error) {
+          console.error('Error adding image to Firestore: ', error);
+        }
+        
+        setImageUri(null);
       }
-      
-      setImageUri(null);
-    }
-  };
+    };
 
 
   
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <TouchableOpacity
-        style={styles.selectImage}
-        onPress={handleImagePick}
-      >
-        <Text style={styles.buttonText}>Select an image from your camera roll. 
-        Please make sure the photo clearly shows the plant for optimal results.</Text>
-      </TouchableOpacity>
-      {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
-      {imageUri && (
-         <Button title="Confirm" onPress={handleConfirm} />
-      )}
-    </View>    
-    );
-  }
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <TouchableOpacity
+          style={styles.selectImage}
+          onPress={handleImagePick}
+        >
+          <Text style={styles.buttonText}>Select an image from your camera roll. 
+          Please make sure the photo clearly shows the plant for optimal results.</Text>
+        </TouchableOpacity>
+        {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
+        {imageUri && (
+          <Button title="Confirm" onPress={handleConfirm} />
+        )}
+      </View>    
+      );
+    }
 
 const styles = StyleSheet.create({
   container: {
