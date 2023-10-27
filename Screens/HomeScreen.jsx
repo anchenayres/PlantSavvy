@@ -7,7 +7,7 @@ import {useUserEmail} from '../Services/firebaseAuth';
 import { fetchUserImages } from '../Services/firebaseDb';
 import { useNavigation } from '@react-navigation/native';
 //import * as FileSystem from 'expo-file-system';
-import RNFS from 'react-native-fs'; //convert to base64 image
+//import RNFS from 'react-native-fs'; //convert to base64 image
 
 //get data
 import { identifyPlant } from '../Services/PlantIdService';
@@ -59,7 +59,7 @@ const HomeScreen = () => {
     //navigate to plantDetailScreen NEED TO DO
     const handlePlantDetailNavigation = async (imageUri, latitude, longitude) => {
       try {
-        const imageBase64 = await RNFS.readFile(imageUri, 'base64');    
+        //const imageBase64 = await RNFS.readFile(imageUri, 'base64');    
         const plantDetails = await identifyPlant(imageBase64, latitude, longitude);
     
         if (plantDetails && plantDetails.result.is_plant) {
