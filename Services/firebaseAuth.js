@@ -1,15 +1,10 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from "firebase/auth";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { initializeAuth, getAuth, onAuthStateChanged } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getReactNativePersistence } from 'firebase/auth';
 import { auth } from '../firebase'; 
-
-//const initializedAuth = initializeAuth(auth, {
-  //persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-//});
-
-//image saving in images collection
 
 const useUserEmail = () => {
   const [userEmail, setUserEmail] = useState("");

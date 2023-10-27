@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView } from 'react-native';
 
 const PlantDetailScreen = ({ route }) => {
   const { imageUri, plantDetails } = route.params;
+  
   const commonName = plantDetails?.commonName;
   const scientificName = plantDetails?.scientificName;
   const description = plantDetails?.description;

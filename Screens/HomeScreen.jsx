@@ -15,24 +15,26 @@ const auth = getAuth();
 const HomeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-
-  // Get the logged-in user's email
   const userEmail = useUserEmail();
-  //const [userImages, setUserImages] = useState([]);
   const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-
-  useEffect(() => {
-    const getImages = async () => {
+  const getImages = async () => {
+    setIsLoading(true);
+    try {
       const userImages = await fetchUserImages(userEmail);
       setImages(userImages);
-    };
-
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
     if (userEmail) {
       getImages();
     }
   }, [userEmail]);
-
    
 
   //logout from homescreen
@@ -73,16 +75,25 @@ const HomeScreen = () => {
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
 
+        
         <ScrollView style={{ marginTop: 20 }}>
-        {images.map((image, index) => (
-          <TouchableOpacity key={index} onPress={handlePlantDetailNavigation}>
-            <Image
-              source={{ uri: image }}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+          {isLoading ? (
+            <Text>Loading images...</Text>
+          ) : images.length === 0 ? (
+            <Text>No images to display</Text>
+          ) : (
+            images.map((image, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handlePlantDetailNavigation(image)}
+              >
+                <Image source={{ uri: image }} style={styles.image} />
+              </TouchableOpacity>
+            ))
+          )}
+        </ScrollView>
+
+
         </View>
       </View>
       );
