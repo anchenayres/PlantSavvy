@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
 import { identifyPlant } from '../Services/PlantIdService';
-
 const PlantDetailScreen = ({ route }) => {
   console.log(route.params)
   
@@ -16,33 +15,24 @@ const PlantDetailScreen = ({ route }) => {
       identifyPlant(imageBase64, latitude, longitude)
         .then((result) => {
           setIdentificationResult(result);
-          console.log('Identification Result:', identificationResult);
+          console.log('Identification Result: ', result);
         })
         .catch((error) => {
           console.error('Error identifying plant:', error);
         });
     }
-
   }, [imageBase64, latitude, longitude]);
 
-  useEffect(() => {
-
-    console.log('PlantDetailScreen component is rendered.');
-    if (imageBase64 && latitude && longitude && plantDetails) {
-    }
-    
-  }, [imageBase64, latitude, longitude, plantDetails]);
 
   return (
+
 <ScrollView>
-      {plantDetails ? (
+      {identificationResult ? (
         <>
-          <Text>Plant Name: {plantDetails.commonName}</Text>
-          <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
-          <Text>Probability: {plantDetails.scientificName}</Text>
-          <Text>Plant Description: {plantDetails.description}</Text>
-        </>
-      ) : (
+    <Text>Plant Name: {plantName}</Text>
+    <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
+    <Text>Probability: {probability}</Text>
+  </>      ) : (
         <Text>Loading plant details...</Text>
       )}
     </ScrollView>

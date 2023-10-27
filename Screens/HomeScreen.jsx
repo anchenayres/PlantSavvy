@@ -62,24 +62,23 @@ const HomeScreen = () => {
         const imageBase64 = await FileSystem.readAsStringAsync(imageUri, {
           encoding: FileSystem.EncodingType.Base64,
         });
-        
+    
         const plantDetails = await identifyPlant(imageBase64, latitude, longitude);
-
-        if (plantDetails) {
-          const imagesRef = collection(db, 'images');
     
-          await addDoc(imagesRef, {
-            userEmail,
-            imageUri,
-            common_name: plantDetails.commonName,
-            scientific_name: plantDetails.scientificName,
-            description: plantDetails.description,
-            createdAt: serverTimestamp(),
-          });
+        if (plantDetails && plantDetails.result.is_plant) {
+          const suggestions = plantDetails.result.classification.suggestions;
     
-          navigation.navigate('PlantDetailScreen', { imageUri, plantDetails });
+          if (suggestions.length > 0) {
+            const mostProbableSuggestion = suggestions[0];
+            const plantName = mostProbableSuggestion.name;
+            const probability = mostProbableSuggestion.probability;
+    //from postman not firestore collection anymore 
+            navigation.navigate('PlantDetailScreen', { imageUri, plantName, probability });
+          } else {
+            console.error('No plant suggestions found');
+          }
         } else {
-          console.error('Plant identification failed');
+          console.error('The image is not of a plant');
         }
       } catch (error) {
         console.error('Error identifying plant:', error);

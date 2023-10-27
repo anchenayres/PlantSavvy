@@ -23,7 +23,6 @@ async function identifyPlant(imageBase64, latitude, longitude) {
 
     return response.data;
   } catch (error) {
-    console.log('Plant Identification Response:', plantDetails);
     console.error('Error identifying plant:', error);
     return { error: 'Plant identification failed' };
   }
