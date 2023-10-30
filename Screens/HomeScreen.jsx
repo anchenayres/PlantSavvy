@@ -21,8 +21,11 @@ const HomeScreen = () => {
   const userEmail = useUserEmail();
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const selectedImageUri = route.params?.imageUri;
+
 
   const getImages = async () => {
+
     setIsLoading(true);
     try {
       const userImages = await fetchUserImages(userEmail);
@@ -33,9 +36,10 @@ const HomeScreen = () => {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (userEmail) {
-      getImages();
+     getImages();
     }
   }, [userEmail]);
    
@@ -57,35 +61,10 @@ const HomeScreen = () => {
   
     
     //navigate to plantDetailScreen NEED TO DO
-    const handlePlantDetailNavigation = async (imageUri, latitude, longitude) => {
-      try {
-        //const imageBase64 = await RNFS.readFile(imageUri, 'base64');    
-        const plantDetails = await identifyPlant(imageBase64, latitude, longitude);
-    
-        if (plantDetails && plantDetails.result.is_plant) {
-          const suggestions = plantDetails.result.classification.suggestions;
-    
-          if (suggestions.length > 0) {
-            const mostProbableSuggestion = suggestions[0];
-            const plantName = mostProbableSuggestion.name;
-            const probability = mostProbableSuggestion.probability;
-    //from postman not firestore collection anymore 
-            navigation.navigate('PlantDetailScreen', { imageUri, plantName, probability });
-          } else {
-            console.error('No plant suggestions found');
-          }
-        } else {
-          console.error('The image is not of a plant');
-        }
-      } catch (error) {
-        console.error('Error identifying plant:', error);
-      }
-    };
-    
+        
     
     return (
         <View style={styles.container}>
-
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity>  
@@ -108,16 +87,10 @@ const HomeScreen = () => {
           <Text>No images to display</Text>
         ) : (
           images.map((image, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handlePlantDetailNavigation(image)}
-            >
-              <Image source={{ uri: image }} style={styles.image} />
-            </TouchableOpacity>
+              <Image key={index} source={{ uri: image }} style={styles.image} />
           ))
         )}
       </ScrollView>
-
         </View>
       </View>
       );

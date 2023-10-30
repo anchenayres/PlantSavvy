@@ -13,7 +13,6 @@ import * as FileSystem from 'expo-file-system';
 const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
-
   const userEmail = useUserEmail();
 
 
@@ -40,19 +39,18 @@ const ScanScreen = () => {
     //navigate plant url to home screen
     const handleConfirm = async () => {
       if (imageUri) {
-        console.log("User Email: " + userEmail);
-
         try {
           // Add the image to the Firestore collection
           await addImageToCollection(imageUri, userEmail);
+          setImageUri(null);
+  
+          // Navigate to the Home screen and pass the imageUri as a parameter
+          navigation.navigate('HomeScreen', { imageUri, name: 'Your image name' });
         } catch (error) {
           console.error('Error adding image to Firestore: ', error);
         }
-        
-        setImageUri(null);
       }
     };
-
 
   
     return (

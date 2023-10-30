@@ -23,21 +23,19 @@ export const registerUser = async (username, email, uid) => {
 }
 
 //images collection
-const addImageToCollection = async (imageUrl, userEmail, plantDetails) => {
-  try {
-    const docRef = await addDoc(collection(db, 'images'), {
-      image_url: imageUrl,
-      user_email: userEmail,
-      commonName: plantDetails.commonName,
-      scientificName: plantDetails.scientificName,
-      description: plantDetails.description,
-    });
+  const addImageToCollection = async (imageUri, userEmail, imageName) => {
+    try {
+      const docRef = await addDoc(collection(db, 'images'), {
+        image_url: imageUri,
+        user_email: userEmail,
+        name: imageName
+      });
 
-    console.log('Image added with ID: ', docRef.id);
-  } catch (error) {
-    console.error('Error adding image: ', error);
-  }
-};
+      console.log('Image added with ID: ', docRef.id);
+    } catch (error) {
+      console.error('Error adding image: ', error);
+    }
+  };
 
 //images showcase
 const fetchUserImages = async (userEmail) => {
