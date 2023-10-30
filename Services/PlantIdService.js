@@ -5,7 +5,7 @@ async function identifyPlant(imageBase64, latitude, longitude, similar_images) {
   const apiUrl = 'https://plant.id/api/v3/identification';
 
   const PlantIdApiKey = Config.PLANT_ID_API_KEY;
-  console.log("Plant ID API Key:", PlantIdApiKey);
+  console.log("Plant ID API Key:", Config.PLANT_ID_API_KEY);
 
   try {
     const response = await axios.post(
@@ -27,7 +27,7 @@ async function identifyPlant(imageBase64, latitude, longitude, similar_images) {
 
     return response.data;
   } catch (error) {
-    console.error('Response:', error.response.data);
+    console.error('Response:', error.response);
     return { error: 'Plant identification failed', status: error.response ? error.response.status : 500, };
     
   }
