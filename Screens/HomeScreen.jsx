@@ -95,7 +95,7 @@ const HomeScreen = () => {
         style={styles.logo}
         />        
 <View>
-        <Text style={styles.heading}>My Plants</Text>
+        <Text style={styles.heading}>My Plant Collection</Text>
         <TouchableOpacity onPress={handleScanNavigation}>
           <Ionicons style={styles.addIcon} name="add" size={30} color="#0B4D21" />
         </TouchableOpacity>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         top: 20,
-        left: 30,
+        left: -85,
         position: 'absolute',
       },
     logoutButton:{
