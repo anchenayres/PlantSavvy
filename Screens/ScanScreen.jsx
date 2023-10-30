@@ -45,7 +45,7 @@ const ScanScreen = () => {
           setImageUri(null);
   
           // Navigate to the Home screen and pass the imageUri as a parameter
-          navigation.navigate('HomeScreen', { imageUri, name: 'Your image name' });
+          navigation.navigate('HomeScreen', { imageUri});
         } catch (error) {
           console.error('Error adding image to Firestore: ', error);
         }
