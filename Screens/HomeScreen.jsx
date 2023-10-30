@@ -81,16 +81,22 @@ const HomeScreen = () => {
 
         
         <ScrollView style={{ marginTop: 20 }}>
-        {isLoading ? (
-          <Text>Loading images...</Text>
-        ) : images.length === 0 ? (
-          <Text>No images to display</Text>
-        ) : (
-          images.map((image, index) => (
-              <Image key={index} source={{ uri: image }} style={styles.image} />
-          ))
-        )}
-      </ScrollView>
+          {isLoading ? (
+            <Text>Loading images...</Text>
+          ) : images.length === 0 ? (
+            <Text>No images to display</Text>
+          ) : (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {images.map((image, index) => (
+                <View key={index} style={styles.imageContainer}>
+                  <Image source={{ uri: image }} style={styles.image} />
+                </View>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+
+
         </View>
       </View>
       );
@@ -130,8 +136,8 @@ const styles = StyleSheet.create({
     },
 
     addIcon: {
-      marginTop: 15, 
-      marginLeft: 150, 
+      marginTop: 18, 
+      left: 245, 
 
     },
 
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         top: 20,
-        left: -85,
+        left: 20,
         position: 'absolute',
       },
     logoutButton:{
@@ -185,5 +191,15 @@ const styles = StyleSheet.create({
       textAlign: 'center', 
       width: 160,
 
+    },
+    imageContainer: {
+      width: '40%', // To display two images per row, set the container width to 50%.
+      padding: 15,
+      left: 45,
+    },
+    image: {
+      width: '100%', // Make sure the image fills the container width.
+      height: 150, // Adjust the height as needed.
+      borderRadius: 20,
     },
   });
