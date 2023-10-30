@@ -10,12 +10,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 
-const customFonts = {
-  Caveat: require('./path/to/Caveat-Regular.ttf'),
-  'regular': require('./fonts/MPLUSRounded1c-Regular.ttf'),
-};
+//const customFonts = {
+  //Caveat: require('./fonts/MPLUSRounded1c-Regular.ttf'),
+  //'regular': require('./fonts/MPLUSRounded1c-Regular.ttf'),
+//};
 
-//MPLUSRounded1c-Regular.ttf
 import HomeScreen from './Screens/HomeScreen';
 import RegisterScreen from './Screens/RegisterScreen';
 import TestScreen from './Screens/TestScreen';
@@ -55,10 +54,10 @@ const TabNavigator = (uploadedImages) => {
 
 
 export default function App() {
-  const [loaded] = useFonts(customFonts);
-  if (!loaded) {
-    return <AppLoading />; // Show a loading screen while fonts are being loaded
-  }
+  //const [loaded] = useFonts(customFonts);
+  //if (!loaded) {
+    //return <AppLoading />; // Show a loading screen while fonts are being loaded
+  //}
   
   const [loggedIn, setLoggedIn] = useState(null);
   const [isNewUser, setIsNewUser] = useState(false); //onboarding
