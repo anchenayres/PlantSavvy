@@ -1,47 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
+
+import {useRoute} from '@react-navigation/native';
 import { identifyPlant } from '../Services/PlantIdService';
 
 
 
+const PlantDetailScreen = ({route}) => {
+  const { identificationResult } = route.params;
 
-const PlantDetailScreen = ({ route }) => {
-  console.log(route.params)
-  
-  
-  const { latitude, longitude, imageUri } = route.params;
-  const [plantDetails, setPlantDetails] = useState(null);
+  // Extract the image URL from the identification result
+  const imageUrl = identificationResult?.images[0]?.url;
 
-  useEffect(() => {
-    console.log('PlantDetailScreen component is rendered.');
-
-    if (imageUri && latitude && longitude) {
-      // You need to pass `imageUri` to the `identifyPlant` function
-      identifyPlant(imageUri, latitude, longitude)
-        .then((result) => {
-          setPlantDetails(result);
-          console.log('Plant Details: ', result);
-        })
-        .catch((error) => {
-          console.error('Error identifying plant:', error);
-        });
-    }
-  }, [imageUri, latitude, longitude]);
   return (
-
-<ScrollView>
-      {plantDetails ? (
-        <>
-    <Text>Plant Name: {plantDetails.plantName}</Text>
-    <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
-    <Text>Probability: {plantDetails.probability}</Text>
-  </>      ) : (
-        <Text>Loading plant details...</Text>
-      )}
+    <ScrollView style={styles.container}>
+      <Image source={{ uri: imageUrl }} style={styles.plantImage} />
+      <Text style={styles.plantName}>Plant Name: {identificationResult?.classification.suggestions[0].name}</Text>
+      {/* Add more details as needed */}
     </ScrollView>
-
-
-    )
+  );
 };
   
 

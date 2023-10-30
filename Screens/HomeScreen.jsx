@@ -23,7 +23,6 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const selectedImageUri = route.params?.imageUri;
 
-
   const getImages = async () => {
 
     setIsLoading(true);
@@ -59,9 +58,16 @@ const HomeScreen = () => {
       navigation.navigate('ScanScreen');
     };
   
+    const handleImageClick = async (imageUri) => {
+      // Perform the plant identification using the imageUri and get the result
+      const result = await identifyPlant(imageUri);
+  
+      // Navigate to the Plant Detail Screen and pass the identification result as a parameter
+      navigation.navigate('PlantDetailScreen', { identificationResult: result });
+    };
     
     //navigate to plantDetailScreen NEED TO DO
-        
+    
     
     return (
         <View style={styles.container}>
@@ -88,8 +94,10 @@ const HomeScreen = () => {
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {images.map((image, index) => (
-                <View key={index} style={styles.imageContainer}>
+                <View key={index} style={styles.imageContainer} >
+                  <TouchableOpacity onPress={() => handleImageClick(image)}>
                   <Image source={{ uri: image }} style={styles.image} />
+                  </TouchableOpacity>
                 </View>
               ))}
             </View>

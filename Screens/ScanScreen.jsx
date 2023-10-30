@@ -7,13 +7,14 @@ import { addImageToCollection } from "../Services/firebaseDb";
 import { useUserEmail } from '../Services/firebaseAuth';
 import * as FileSystem from 'expo-file-system';
 
-
+import { identifyPlant } from '../Services/PlantIdService';
 
 
 const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
   const userEmail = useUserEmail();
+
 
 
 
@@ -29,6 +30,7 @@ const ScanScreen = () => {
       const imageBase64 = await FileSystem.readAsStringAsync(pickedImageUri, {
               encoding: FileSystem.EncodingType.Base64,
             });
+            identifyPlant(imageBase64);
             console.log('Image as base64:', imageBase64);
           }
         } catch (error) {

@@ -6,7 +6,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { auth } from './firebase';
 import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
 
