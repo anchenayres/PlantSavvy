@@ -9,9 +9,9 @@ const OnboardingTwo = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to My App</Text>
+      <Text style={styles.title}>Scan Your Plants</Text>
       <Text style={styles.description}>
-        Check out you plants.
+        Visit the Scan Screen to upload all your indoor / outdoor plants to your profile. This will allow you to examine the conditions of you plants.
       </Text>
       <Button title="Next" onPress={handleNext} />
     </View>
