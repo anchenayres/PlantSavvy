@@ -56,7 +56,8 @@ const ScanScreen = () => {
 
   
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff',
+    }}>
         <TouchableOpacity
           style={styles.selectImage}
           onPress={handleImagePick}
@@ -66,8 +67,10 @@ const ScanScreen = () => {
         </TouchableOpacity>
         {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
         {imageUri && (
-          <Button title="Confirm" onPress={handleConfirm} />
-        )}
+        <TouchableOpacity style={styles.loginButton} onPress={handleConfirm}>
+          <Text style={styles.buttonLogin}>Confirm</Text>
+        </TouchableOpacity>    
+)}
       </View>    
       );
     }
@@ -77,7 +80,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff',
+
   },
+  loginButton: {
+    backgroundColor: "#0B4D21",
+    borderRadius: 5,
+    marginTop: 80,
+    padding: 10,
+  },
+  buttonLogin: {
+    fontSize: 16,
+    color: "white",
+    textAlign: "center",
+  },
+
   selectedImage: {
     width: 200,
     height: 200,
@@ -100,6 +117,9 @@ const styles = StyleSheet.create({
     color: '#0B4D21',
     textAlign: 'center',
   },
+  confirm:{
+
+  }
 });
 
 export default ScanScreen;
