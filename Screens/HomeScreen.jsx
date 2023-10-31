@@ -9,7 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 //import * as FileSystem from 'expo-file-system';
 //import RNFS from 'react-native-fs'; //convert to base64 image
 
-//get data
 import { identifyPlant } from '../Services/PlantIdService';
 
 const auth = getAuth();
@@ -21,7 +20,6 @@ const HomeScreen = () => {
   const userEmail = useUserEmail();
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const selectedImageUri = route.params?.imageUri;
 
   const getImages = async () => {
 
@@ -59,10 +57,7 @@ const HomeScreen = () => {
     };
   
     const handleImageClick = async (imageUri) => {
-      // Perform the plant identification using the imageUri and get the result
       const result = await identifyPlant(imageUri);
-  
-      // Navigate to the Plant Detail Screen and pass the identification result as a parameter
       navigation.navigate('PlantDetailScreen', { identificationResult: result });
     };
     

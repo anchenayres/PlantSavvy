@@ -1,4 +1,5 @@
-
+import 'react-native-config';
+console.log('Environment Variables:', process.env);
 import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,7 +9,6 @@ import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { AppLoading } from 'expo';
-
 //const customFonts = {
   //Caveat: require('./fonts/MPLUSRounded1c-Regular.ttf'),
   //'regular': require('./fonts/MPLUSRounded1c-Regular.ttf'),
