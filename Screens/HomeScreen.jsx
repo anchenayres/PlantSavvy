@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
 
     },
     imageContainer: {
-      width: '40%', // To display two images per row, set the container width to 50%.
+      width: '70%', // To display two images per row, set the container width to 50%.
       padding: 15,
       left: 45,
     },

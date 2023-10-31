@@ -1,5 +1,6 @@
 import 'react-native-config';
 console.log('Environment Variables:', process.env);
+
 import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -34,18 +35,52 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = (uploadedImages) => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'HomeScreen') {
+            iconName = focused ? 'home' : 'home-outline'; // You can replace these with your desired icon names
+          } else if (route.name === 'TestScreen') {
+            iconName = focused ? 'business' : 'business-outline';
+          } else if (route.name === 'NewScreen') {
+            iconName = focused ? 'settings' : 'settings-outline';
+          } else if (route.name === 'ScanScreen') {
+            iconName = focused ? 'cloud-upload' : 'cloud-upload-outline';
+          }
+
+          // Return the Ionicons component with the iconName and styling
+          return <Ionicons name={iconName} padding={10} size={size} color={"#0B4D21"} />
+        },
+      })}
+    >
+      
       <Tab.Screen 
       name="HomeScreen"
       component={HomeScreen}
       initialParams={{uploadedImages}}
       options={{
         headerTitle: '',
+        tabBarLabel: '',
       }}
       />
-      <Tab.Screen name="TestScreen" component={TestScreen} />
-      <Tab.Screen name="NewScreen" component={NewScreen} />
-      <Tab.Screen name="ScanScreen" component={ScanScreen} />
+      <Tab.Screen 
+      name="ScanScreen" 
+      component={ScanScreen}
+      options={{
+        headerTitle: '',
+        tabBarLabel: '',
+      }}
+      />
+      <Tab.Screen 
+      name="NewScreen" 
+      component={NewScreen} 
+      options={{
+        headerTitle: '',
+        tabBarLabel: '',
+      }}
+      />
 
     </Tab.Navigator>
   );
@@ -94,7 +129,7 @@ export default function App() {
             </>
           ) : (
             // Show the home screen for returning users
-            <Stack.Screen name="OuterHomeScreen" component={TabNavigator} />
+            <Stack.Screen name="OuterHomeScreen" component={TabNavigator} options={{ headerTitle: ''}} />
           )
         ) : (
           // Show login and registration screens when the user is not signed in
