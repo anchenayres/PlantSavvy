@@ -14,12 +14,19 @@ const PlantDetailScreen = ({route}) => {
 
   return (
     <ScrollView style={styles.container}>
+        <Image
+        source={require("../assets/background2.jpg")} // Check the path to your image
+        style={styles.bubble}
+        />        
       <Image source={{ uri: imageUrl }} style={styles.plantImage} />
       <View>
         
       </View>
-      <Text style={styles.plantName}>Plant Name:</Text>
-      {/* Add more details as needed */}
+      <Text style={styles.plantName}>Common Names:</Text>
+      <Image
+        source={require("../assets/background.jpg")} // Check the path to your image
+        style={styles.bubble2}
+        />        
     </ScrollView>
   );
 };
@@ -41,14 +48,33 @@ const styles = StyleSheet.create({
     marginLeft: '18%'
   },
   plantName: {
-    fontSize: 24,
-    
+    fontSize: 14,
     marginVertical: 10,
+    
   },
   detailText: {
     fontSize: 16,
     marginBottom: 10,
   },
+  bubble:{
+    height: 150,
+    width: 150,
+    borderBottomRightRadius: 150,
+    position: 'absolute',
+    left: -20,
+    top: -20,
+
+  },
+  bubble2:{
+    height: 150,
+    width: 150,
+    borderTopLeftRadius: 150,
+    position: 'absolute',
+    right: -20,
+    top: 200,
+
+  },
+
 });
 
 export default PlantDetailScreen;
