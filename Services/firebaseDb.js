@@ -39,20 +39,25 @@ export const registerUser = async (username, email, uid) => {
 
 //images showcase
 const fetchUserImages = async (userEmail) => {
-  const q = query(
-    collection(db, 'images'),
-    where('user_email', '==', userEmail)
-  );
+  try {
+    const q = query(
+      collection(db, 'images'),
+      where('user_email', '==', userEmail)
+    );
 
-  const querySnapshot = await getDocs(q);
-  const userImages = [];
+    const querySnapshot = await getDocs(q);
+    const userImages = [];
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    userImages.push(data.image_url);
-  });
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      userImages.push({ image_url: data.image_url, base64: data.base });
+    });
 
-  return userImages;
+    return userImages;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    throw error; // Rethrow the error to propagate it
+  }
 };
 
 export { db, addImageToCollection, fetchUserImages };

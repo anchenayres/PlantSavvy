@@ -20,6 +20,7 @@ const HomeScreen = () => {
   const userEmail = useUserEmail();
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [base64, setBase64] = useState(null);
 
   const getImages = async () => {
 
@@ -55,15 +56,41 @@ const HomeScreen = () => {
     const handleScanNavigation = () => {
       navigation.navigate('ScanScreen');
     };
-  
-    const handleImageClick = async (imageUri) => {
-      const result = await identifyPlant(imageUri);
-      navigation.navigate('PlantDetailScreen', { identificationResult: result });
+
+    const convertBlobToBase64 = (blob) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     };
-    
-    //navigate to plantDetailScreen NEED TO DO
-    
-    
+
+    const fetchBase64ForImage = async (imageUri) => {
+      try {
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
+        const base64 = await convertBlobToBase64(blob);
+        return base64;
+      } catch (error) {
+        console.error('Error fetching base64 for image:', error);
+        return null; // Handle the error case as needed
+      }
+    };
+  
+  //navigate to detail screen based on base64
+  const handleImageClick = async (imageUri, base64) => {
+    try {
+      const result = await identifyPlant(base64);
+      console.log('Identification Result:', result); // Add this line
+  
+      // Rest of your code
+    } catch (error) {
+      console.error('Error identifying plant:', error);
+    }
+  }    
     return (
         <View style={styles.container}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -90,8 +117,8 @@ const HomeScreen = () => {
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {images.map((image, index) => (
                 <View key={index} style={styles.imageContainer} >
-                  <TouchableOpacity onPress={() => handleImageClick(image)}>
-                  <Image source={{ uri: image }} style={styles.image} />
+                  <TouchableOpacity onPress={() => handleImageClick(image.image_url, image.base64)}>
+                  <Image source={{ uri: image.image_url }} style={styles.image} />
                   </TouchableOpacity>
                 </View>
               ))}

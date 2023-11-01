@@ -6,11 +6,23 @@ import { identifyPlant } from '../Services/PlantIdService';
 
 
 const PlantDetailScreen = ({route}) => {
-  const { identifyPlant } = route.params;
 
-  // Extract the image URL from the identification result
-  const imageUrl = identifyPlant?.images[0]?.url;
-  console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
+  const { imageUri, identificationResult } = route.params;
+  
+  if (identificationResult && !identificationResult.error) {
+    // Display the identificationResult data here
+  } else {
+    console.error('Plant identification failed:', identificationResult);
+    // Handle the error case
+  }
+  
+  const imageUrl = identificationResult?.images[0]?.url;
+  console.log("Image URI:", imageUri);
+  
+  console.log("Identification Result:", identificationResult);
+  
+  
+  //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
 
   const [displayContent, setDisplayContent] = useState('speciesIdentification');
 
@@ -18,9 +30,14 @@ const PlantDetailScreen = ({route}) => {
     <View style={styles.container}>
       <View style={styles.imageContainer}>
       <Image source={{ uri: imageUrl }} style={styles.plantImage} />
+      {identificationResult && (
+        <View>
+          <Text>Plant Name: {identificationResult.name}</Text>
+          <Text>Description: {identificationResult.description}</Text>
+        </View>
+      )}
+
       </View>
-
-
       <ScrollView style={styles.innerContainer}>
       <View style={styles.buttonContainer}>
       <TouchableOpacity
