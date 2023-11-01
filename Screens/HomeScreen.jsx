@@ -86,11 +86,13 @@ const HomeScreen = () => {
       const result = await identifyPlant(base64);
       console.log('Identification Result:', result); // Add this line
   
+       navigation.navigate('PlantDetailScreen', { imageUri, identificationResult: result });
       // Rest of your code
     } catch (error) {
       console.error('Error identifying plant:', error);
     }
-  }    
+  }
+
     return (
         <View style={styles.container}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

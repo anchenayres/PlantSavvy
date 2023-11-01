@@ -7,38 +7,34 @@ import { identifyPlant } from '../Services/PlantIdService';
 
 const PlantDetailScreen = ({route}) => {
 
-  const { imageUri, identificationResult } = route.params;
-  
-  if (identificationResult && !identificationResult.error) {
-    // Display the identificationResult data here
-  } else {
-    console.error('Plant identification failed:', identificationResult);
-    // Handle the error case
-  }
-  
-  const imageUrl = identificationResult?.images[0]?.url;
-  console.log("Image URI:", imageUri);
-  
-  console.log("Identification Result:", identificationResult);
-  
+  const { identificationResult } = route.params;
+  const suggestions = identificationResult.result.classification.suggestions;
+  const isPlant = identificationResult.result.is_plant;
   
   //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
 
   const [displayContent, setDisplayContent] = useState('speciesIdentification');
 
   return (
-    <View style={styles.container}>
+<View style={styles.container}>
       <View style={styles.imageContainer}>
-      <Image source={{ uri: imageUrl }} style={styles.plantImage} />
-      {identificationResult && (
-        <View>
-          <Text>Plant Name: {identificationResult.name}</Text>
-          <Text>Description: {identificationResult.description}</Text>
-        </View>
-      )}
-
+        {identificationResult && (
+          <View>
+            <Text>Plant Name: {identificationResult.result.classification.suggestions[0].name}</Text>
+            <Text>Probability: {identificationResult.result.is_plant.probability}</Text>
+            <Text>Suggestions:</Text>
+            <View>
+              {identificationResult.result.classification.suggestions.map((suggestion, index) => (
+                <Text key={index}>{suggestion.name}</Text>
+              ))}
+            </View>
+          </View>
+        )}
       </View>
-      <ScrollView style={styles.innerContainer}>
+
+      
+          
+    <ScrollView style={styles.innerContainer}>
       <View style={styles.buttonContainer}>
       <TouchableOpacity
           style={displayContent === 'speciesIdentification' ? styles.activeButton : styles.button}
