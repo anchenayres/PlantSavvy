@@ -44,12 +44,12 @@ const ScanScreen = () => {
 
     //navigate plant url to home screen
     const handleConfirm = async () => {
-      if (imageUri) {
+      if (imageUri && base64) {
         try {
           // Add the image to the Firestore collection
           await addImageToCollection(imageUri, userEmail, base64);
           setImageUri(null);
-          setBase64(imageBase64)
+          setBase64(null);
 
   
           // Navigate to the Home screen and pass the imageUri as a parameter
