@@ -13,6 +13,8 @@ import { identifyPlant } from '../Services/PlantIdService';
 const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
+  const [base64, setBase64] = useState();
+
   const userEmail = useUserEmail();
 
 
@@ -30,8 +32,10 @@ const ScanScreen = () => {
       const imageBase64 = await FileSystem.readAsStringAsync(pickedImageUri, {
               encoding: FileSystem.EncodingType.Base64,
             });
-            identifyPlant(imageBase64);
+            //identifyPlant(base64);
+            setBase64(imageBase64)
             console.log('Image as base64:', imageBase64);
+
           }
         } catch (error) {
           console.error('Error while picking an image:', error);
@@ -43,8 +47,10 @@ const ScanScreen = () => {
       if (imageUri) {
         try {
           // Add the image to the Firestore collection
-          await addImageToCollection(imageUri, userEmail);
+          await addImageToCollection(imageUri, userEmail, base64);
           setImageUri(null);
+          setBase64(imageBase64)
+
   
           // Navigate to the Home screen and pass the imageUri as a parameter
           navigation.navigate('HomeScreen', { imageUri});

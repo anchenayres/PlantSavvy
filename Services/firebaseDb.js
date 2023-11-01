@@ -1,4 +1,4 @@
-import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs,Timestamp } from 'firebase/firestore';
 import {db} from "../firebase";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { userEmail } from '../Services/firebaseAuth';
@@ -23,11 +23,12 @@ export const registerUser = async (username, email, uid) => {
 }
 
 //images collection
-  const addImageToCollection = async (imageUri, userEmail) => {
+  const addImageToCollection = async (imageUri, userEmail, base64) => {
     try {
       const docRef = await addDoc(collection(db, 'images'), {
         image_url: imageUri,
         user_email: userEmail,
+        base: base64,
       });
 
       console.log('Image added with ID: ', docRef.id);

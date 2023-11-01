@@ -5,7 +5,7 @@ console.log("Environment Variables:", Config);
 async function identifyPlant(imageBase64, latitude, longitude, similar_images, health) {
   const apiUrl = 'https://plant.id/api/v3/identification';
 
-  const PlantIdApiKey = Config.PLANT_ID_API_KEY;
+  const PlantIdApiKey = 'OKsSs9dRIQRkLhJY2kkqvmcPW5Koo13unmXUjxCTkIctoHshYL';
   console.log("Plant ID API Key:", PlantIdApiKey);
 
   
