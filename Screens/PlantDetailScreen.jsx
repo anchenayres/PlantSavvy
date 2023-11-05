@@ -17,6 +17,11 @@ const PlantDetailScreen = ({route}) => {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={require("../assets/plantWallpaper.jpg")} // Check the path to your image
+        style={styles.backgroundImage}
+      />        
+
       <View style={styles.imageContainer}>
     </View>
 
@@ -74,17 +79,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  backgroundImage: {
+    position: 'absolute',
+    flex: 1,
+    width: 430,
+    height: 940,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   imageContainer: {
     flex: 1,
   },
   innerContainer:{
     height: 300,
-    width: 400,
-    left: -5,
-    backgroundColor: '#b2dabe',
+    width: 300,
+    left: 0,
+    
+    backgroundColor: 'red',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    top: 40,
+    top: -200,
 //'#b2dabe'
   },
 //DATA

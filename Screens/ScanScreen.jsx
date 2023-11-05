@@ -14,7 +14,7 @@ const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
   const [base64, setBase64] = useState();
-
+  const [uploadButtonVisible, setUploadButtonVisible] = useState(true);
   const userEmail = useUserEmail();
 
 
@@ -35,6 +35,8 @@ const ScanScreen = () => {
             //identifyPlant(base64);
             setBase64(imageBase64)
             console.log('Image as base64:', imageBase64);
+
+            setUploadButtonVisible(false);
 
           }
         } catch (error) {
@@ -64,13 +66,14 @@ const ScanScreen = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff',
     }}>
+      {uploadButtonVisible && (
         <TouchableOpacity
-          style={styles.selectImage}
+          style={styles.uploadButton}
           onPress={handleImagePick}
         >
-          <Text style={styles.buttonText}>Select an image from your camera roll. 
-          Please make sure the photo clearly shows the plant for optimal results.</Text>
+          <Text style={styles.buttonText}>Upload</Text>
         </TouchableOpacity>
+      )}
         {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
         {imageUri && (
         <TouchableOpacity style={styles.loginButton} onPress={handleConfirm}>
@@ -111,17 +114,15 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
   },
-  selectImage: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
+  uploadButton: {
+    backgroundColor: "#0B4D21",
     borderRadius: 5,
-    width: 300,
+    padding: 15,
   },
   buttonText: {
     fontSize: 16,
-    color: '#0B4D21',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
   confirm:{
 

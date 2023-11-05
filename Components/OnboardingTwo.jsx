@@ -9,6 +9,11 @@ const OnboardingTwo = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+            <Image
+        source={require("../assets/plantWallpaper.jpg")} // Check the path to your image
+        style={styles.backgroundImage}
+      />        
+
       <Text style={styles.title}>Upload your Plant</Text>
       <Image
         source={require("../assets/upload.png")} // Check the path to your image
@@ -33,6 +38,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     backgroundColor: 'white',
+  },
+  backgroundImage: {
+    position: 'absolute',
+    flex: 1,
+    width: 430,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
