@@ -11,6 +11,9 @@ const PlantDetailScreen = ({route}) => {
   const suggestions = identificationResult.result.classification.suggestions;
   const isPlant = identificationResult.result.is_plant;
   
+  const [taxonomyData, setTaxonomyData] = useState(null); // data
+
+
   //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
 
   const [displayContent, setDisplayContent] = useState('speciesIdentification');
@@ -21,11 +24,12 @@ const PlantDetailScreen = ({route}) => {
         source={require("../assets/plantWallpaper.jpg")} // Check the path to your image
         style={styles.backgroundImage}
       />        
+    
+    <View style={styles.headerBlock}>
+        <Text style={styles.headerText}>Plant Identified As</Text>
+        <Text style={styles.headerBold}>{identificationResult.result.classification.suggestions[0].name}</Text>
+      </View>
 
-      <View style={styles.imageContainer}>
-    </View>
-
-      
           
     <ScrollView style={styles.innerContainer}>
       <View style={styles.buttonContainer}>
@@ -53,8 +57,49 @@ const PlantDetailScreen = ({route}) => {
                       .map((suggestion) => suggestion.name)
                       .join(', ')}
                   </Text>
-)}
+        )}
+{/* Display Similar Images */}
+<Text style={styles.sectionHeader}>Similar Images</Text>
+            <View style={styles.similarImagesContainer}>
+              {identificationResult.result.classification.suggestions[0].similar_images?.map(
+                (similarImage) => (
+                  <TouchableOpacity
+                    key={similarImage.id}
+                    onPress={() => {
+                      // Handle opening or displaying the similar image
+                      // You can open a modal or navigate to a new screen for details
+                    }}
+                  >
+                    <Image
+                      source={{ uri: similarImage.url_small }}
+                      style={styles.similarImage}
+                    />
+                  </TouchableOpacity>
+                )
+              )}
             </View>
+
+            {/* Display Similar Plants */}
+            <Text style={styles.bold}>Similar Plants</Text>
+          <View style={styles.similarPlantsContainer}>
+            {identificationResult.result.classification.suggestions.slice(1).map((suggestion) => (
+              <TouchableOpacity
+                key={suggestion.id}
+                onPress={() => {
+                  // Handle opening or displaying details for the similar plant
+                  // You can navigate to a new screen for details
+                }}
+              >
+                <Text style={styles.similarPlantName}>{suggestion.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+
+
+
+      
+      </View>
           
         )}
           {displayContent === 'healthAssessment' && (
@@ -91,16 +136,30 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
   },
+  headerBold:{
+color:'black',
+  },
   innerContainer:{
-    height: 300,
-    width: 300,
-    left: 0,
-    
-    backgroundColor: 'red',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    top: -200,
+    height: 20,
+    width: 370,
+    left: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 30,
+    top: 80,
 //'#b2dabe'
+  },
+  headerBlock: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    padding: 15,
+    borderRadius: 10,
+    margin: 10,
+    marginTop: 150,
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
   },
 //DATA
   speciesIdentificationContainer: {
@@ -112,7 +171,7 @@ const styles = StyleSheet.create({
   probability:{
     padding: 2,
     marginLeft: 10,
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
   },
   suggestName:{
@@ -120,7 +179,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 2,
     margin: 10,
-    color: 'white',
+    color: 'black',
     
   },
   plantImage: {
@@ -144,20 +203,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
+    top: 10,
   },
   buttonText: {
     color: '#0B4D21',
     fontWeight: 'bold',
+    fontSize: 12,
+
   },
   button: {
     backgroundColor: '#a7d4b4',
     padding: 10,
     borderRadius: 5,
+    width: 170,
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   activeButton: {
     backgroundColor: '#d4eadb', // Change the color when active
     padding: 10,
     borderRadius: 5,
+    width: 170,
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   activeButtonText: {
     color: 'white',
@@ -166,7 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10,
     marginTop: 10,
-    color: 'white',
+    color: 'black',
     fontSize: 15,
 
   },
