@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 24,
         top: -60,
-        left: 20,
+        left: '40%',
       },
       question:{
         fontSize: 16, 
