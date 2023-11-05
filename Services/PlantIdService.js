@@ -25,7 +25,8 @@ async function identifyPlant(imageBase64, latitude, longitude, similar_images, h
           'Content-Type': 'application/json',
         },
         
-      });
+      }
+    );
 
       
     
@@ -37,5 +38,6 @@ async function identifyPlant(imageBase64, latitude, longitude, similar_images, h
     
   }
 }
+
 
 export { identifyPlant };

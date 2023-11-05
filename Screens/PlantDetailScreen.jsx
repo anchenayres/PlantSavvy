@@ -4,14 +4,13 @@ import {useRoute} from '@react-navigation/native';
 import { identifyPlant } from '../Services/PlantIdService';
 
 
-
 const PlantDetailScreen = ({route}) => {
 
   const { identificationResult } = route.params;
   const suggestions = identificationResult.result.classification.suggestions;
   const isPlant = identificationResult.result.is_plant;
   
-  const [taxonomyData, setTaxonomyData] = useState(null); // data
+
 
 
   //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
