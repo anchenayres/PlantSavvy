@@ -111,9 +111,9 @@ For data storage, the following was used:
 
 * Local Storage: Certain data, such as user preferences and temporary data, is stored locally on the user's device to improve app performance.
 
-![image2](./MockUps/3.png)
-
 ### Core Features
+
+![image0](./assets/mockup2.png)
 
 ### Onboarding
 
@@ -204,7 +204,7 @@ As there is no real data being represented yet for the identification and health
 * "Absolutely"
 
 
-![image4](./MockUps/4.png)
+![image2](./assets/mockup3.png)
 
 Visit the [GitHub repository](https://github.com/anchenayres/PlantSavvy) for an overview of proposed features and ongoing development (if applicable).
 
@@ -227,3 +227,7 @@ Please refer to the app's official documentation and the LICENSE.md file for mor
 - [StackOverflow](https://stackoverflow.com/)
 - [Plant.id](https://plant.id/)
 - [Plant.id V3 API Documentation](https://documenter.getpostman.com/view/24599534/2s93z5A4v2#auth-info-c4a4048d-ed97-4532-8980-3159ddbfe629)
+
+![image3](./assets/mockup4.png)
+![image4](./assets/mockup5.png)
+![image5](./assets/mockup6.png)
