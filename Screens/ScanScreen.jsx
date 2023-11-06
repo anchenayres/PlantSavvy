@@ -28,22 +28,18 @@ const ScanScreen = () => {
       if (!result.canceled) {
         const pickedImageUri = result.assets[0].uri;
         setImageUri(pickedImageUri);
-
-      const imageBase64 = await FileSystem.readAsStringAsync(pickedImageUri, {
-              encoding: FileSystem.EncodingType.Base64,
-            });
-            //identifyPlant(base64);
-            setBase64(imageBase64)
-            console.log('Image as base64:', imageBase64);
-
-            //setUploadButtonVisible(false);
-
-          }
-        } catch (error) {
-          console.error('Error while picking an image:', error);
-        }
-    };    
-
+  
+        const imageBase64 = await FileSystem.readAsStringAsync(pickedImageUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        setBase64(imageBase64);
+       console.log('Image as base64:', imageBase64);
+      }
+    } catch (error) {
+      console.error('Error while picking an image:', error);
+    }
+  };
+  
     //navigate plant url to home screen
     const handleConfirm = async () => {
       if (imageUri && base64) {
@@ -64,23 +60,24 @@ const ScanScreen = () => {
 
   
     return (
-<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-  
-      <TouchableOpacity style={styles.uploadButton} onPress={handleImagePick}>
-        <Text style={styles.buttonText}>
-          {imageUri ? 'Change Image' : 'Upload'}
-        </Text>
-      </TouchableOpacity>
-
-      {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
-      {imageUri && (
-        <TouchableOpacity style={styles.loginButton} onPress={handleConfirm}>
-          <Text style={styles.buttonLogin}>Confirm</Text>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+        {imageUri ? null : (
+      <Image source={require('../assets/plantWallpaper.jpg')} style={styles.backgroundImage} />
+        )}
+        <TouchableOpacity style={styles.uploadButton} onPress={handleImagePick}>
+          <Text style={styles.buttonText}>{imageUri ? 'Change Image' : 'Upload'}</Text>
         </TouchableOpacity>
-      )}
-    </View>    
+        {imageUri && (
+          <Image source={{ uri: imageUri }} style={styles.selectedImage} />
+        )}
+        {imageUri && (
+          <TouchableOpacity style={styles.loginButton} onPress={handleConfirm}>
+            <Text style={styles.buttonLogin}>Confirm</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     );
-    }
+            }
 
 const styles = StyleSheet.create({
   container: {
@@ -95,10 +92,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 15,
   },
-  backgroundImage:{
-    height: 220,
-    width: 800,
+  backgroundImage: {
+    height: 800,
+    width: 430,
+    position: 'absolute', // Position the background image
+    top: 0,
+    left: 0,
+    zIndex: -1,
   },
+
   buttonLogin: {
     fontSize: 16,
     color: "white",
