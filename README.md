@@ -48,7 +48,7 @@ The AI service in PlantSavvvy is responsible for plant identification. It enable
 
 ## Getting Started
 
-The following steps and instructions will guide you through setting up the Nova management system on your local machine for development, practice, and testing purposes.
+The following steps and instructions will guide you through setting up the PlantSavvy on your local machine for development, practice, and testing purposes.
 
 ### How to Install
 
