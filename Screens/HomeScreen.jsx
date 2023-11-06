@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 //import RNFS from 'react-native-fs'; //convert to base64 image
 
 import { identifyPlant } from '../Services/PlantIdService';
-import { WebView } from 'react-native-webview';
+import { assessPlantHealth } from '../Services/PlantIdService';
 
 const auth = getAuth();
 
@@ -93,7 +93,7 @@ const HomeScreen = () => {
       const result = await identifyPlant(base64, latitude, longitude, true, details, language);
       console.log('Identification Result:', result); // Add this line
   
-       navigation.navigate('PlantDetailScreen', { imageUri, identificationResult: result });
+       navigation.navigate('PlantDetailScreen', { imageUri, identificationResult: result, imageBase64: base64 });
       // Rest of your code
     } catch (error) {
       console.error('Error identifying plant:', error);

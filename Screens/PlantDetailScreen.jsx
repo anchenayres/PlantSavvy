@@ -17,8 +17,8 @@ const PlantDetailScreen = ({route}) => {
   const [selectedImageURL, setSelectedImageURL] = useState('');
 
   const openModal = () => {
-    console.log('Selected Image URL:', url);
-    setSelectedImageURL(url);
+    console.log('Selected Image URL:', similarImageUrl);
+    setSelectedImageURL(similarImageUrl);
     setModalVisible(true);
   };
   const closeModal = () => {
@@ -37,9 +37,17 @@ const PlantDetailScreen = ({route}) => {
         // Set description data
         const description = identificationResult.result.classification.suggestions[0].details.description;
         setDescription(description);
+        console.log('Identification Result:', identificationResult);
+        console.log('Number of Disease Suggestions:', identificationResult.result.disease.suggestions.length);
       }
     }
   }, [route.params]);
+
+  console.log('identificationResult:', identificationResult);
+  console.log('Identification Result:', identificationResult);
+  console.log('Number of Disease Suggestions:', identificationResult.result.disease.suggestions.length);
+  console.log('taxonomy:', taxonomy);
+  console.log('description:', description);
 
   //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
 
@@ -93,44 +101,40 @@ const PlantDetailScreen = ({route}) => {
                     .join(', ')}
                 </Text>
 
+                <View style={styles.similarImagesContainer}>
+              {identificationResult.result.classification.suggestions[0].similar_images?.map(
+                (similarImage) => (
+                  <TouchableOpacity
+                    key={similarImage.id}
+                    onPress={() => openModal(similarImage.url_small)}
+                  >
+                    <Image
+                      source={{ uri: similarImage.url_small }}
+                      style={styles.similarImage}
+                    />
+                  </TouchableOpacity>
+                )
+              )}
+            </View>
 
 
-
-
-            <View style={styles.similarImagesContainer}>
-    {identificationResult.result.classification.suggestions[0].similar_images?.map(
-      (similarImage) => (
-        <TouchableOpacity
-          key={similarImage.id}
-          onPress={() => openModal(similarImage.url_small)} // Open the modal with the selected image URL
-        >
-          <Image
-            source={{ uri: similarImage.url_small }}
-            style={styles.similarImage}
-          />
-        </TouchableOpacity>
-      )
-    )}
-  </View>
-
-      {/* Similar Image Modal */}
-      <Modal
-    animationType="slide"
-    transparent={true}
-    visible={modalVisible}
-    onRequestClose={() => setModalVisible(false)}
+            <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <TouchableOpacity
+    style={styles.modalContainer}
+    activeOpacity={1} // To disable the opacity effect
+    onPress={closeModal}
   >
-    <View style={styles.modalContainer}>
-      <Image
-        source={{ uri: selectedImageURL }}
-        style={styles.modalImage}
-      />
-      <TouchableOpacity onPress={closeModal}>
-        <Text style={styles.closeModalText}>Close</Text>
-      </TouchableOpacity>
-    </View>
-  </Modal>
-
+    <Image
+      source={{ uri: selectedImageURL }}
+      style={styles.modalImage}
+    />
+  </TouchableOpacity>
+</Modal>
   <Text style={styles.bold}>Taxonomy</Text>
   {taxonomy && (
   <View style={styles.taxonomyContainer}>
@@ -167,6 +171,9 @@ const PlantDetailScreen = ({route}) => {
           
         )}
 
+
+
+
 {displayContent === 'healthAssessment' && (
           <View style={styles.healthAssessmentContainer}>
             <Text style={styles.bold}>Health Assessment</Text>
@@ -174,22 +181,31 @@ const PlantDetailScreen = ({route}) => {
               {identificationResult.result.classification.suggestions[0].name}
             </Text>
 
-            {/* Display health-related information here */}
+
+
             {identificationResult.result.disease && (
-              <View>
-                {identificationResult.result.disease.suggestions.map(
-                  (suggestion, index) => (
-                    <View key={index}>
-                      <Text style={styles.healthName}>Disease Name: </Text>
-                      <Text style={styles.healthNameValue}>{suggestion.name}</Text>
-                      <Text style={styles.healthName}>Probability of Disease:</Text>
-                      <Text style={styles.healthNameValue}>{suggestion.probability}</Text>
-                      {/* Add more health-related information here */}
-                    </View>
-                  )
-                )}
-              </View>
-            )}
+  <View>
+    {identificationResult.result.disease.suggestions.map((suggestion, index) => (
+      <View key={index}>
+        <Text style={styles.healthName}>Disease Name: {suggestion.name}</Text>
+        <Text style={styles.healthName}>Probability of Disease: {suggestion.probability}</Text>
+
+        <View style={styles.similarImagesContainer}>
+          {suggestion.similar_images?.map((similarImage) => (
+            <TouchableOpacity key={similarImage.id} onPress={() => openModal(similarImage.url_large)}>
+              <Image source={{ uri: similarImage.url_small }} style={styles.similarImage} />
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    ))}
+  </View>
+)}
+
+
+
+
+            
             {!identificationResult.result.disease && (
               <Text style={styles.light}>
                 No health-related information available.
@@ -197,6 +213,16 @@ const PlantDetailScreen = ({route}) => {
             )}
           </View>
         )}
+
+
+
+
+
+
+
+
+
+
       
       </ScrollView>
     </View>
@@ -217,6 +243,10 @@ const styles = StyleSheet.create({
     height: 940,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  similarImagesContainer:{
+    backgroundColor:'red',
+
   },
   taxonomyText:{
 color: 'black',
