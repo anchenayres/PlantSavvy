@@ -60,6 +60,7 @@ const PlantDetailScreen = ({route}) => {
     
     <View style={styles.headerBlock}>
         <Text style={styles.headerText}>Plant Identified As</Text>
+        <Text style={styles.headerBold}>{identificationResult.result.classification.suggestions[0].name}</Text>
       </View>
 
           
@@ -169,8 +170,7 @@ const PlantDetailScreen = ({route}) => {
 {displayContent === 'healthAssessment' && (
           <View style={styles.healthAssessmentContainer}>
             <Text style={styles.bold}>Health Assessment</Text>
-            <Text style={styles.light}>
-              Common Names:
+            <Text style={styles.commonNamesValue}>
               {identificationResult.result.classification.suggestions[0].name}
             </Text>
 
@@ -180,10 +180,10 @@ const PlantDetailScreen = ({route}) => {
                 {identificationResult.result.disease.suggestions.map(
                   (suggestion, index) => (
                     <View key={index}>
-                      <Text style={styles.bold}>Disease Name:</Text>
-                      <Text style={styles.light}>{suggestion.name}</Text>
-                      <Text style={styles.bold}>Severity:</Text>
-                      <Text style={styles.light}>{suggestion.severity}</Text>
+                      <Text style={styles.healthName}>Disease Name: </Text>
+                      <Text style={styles.healthNameValue}>{suggestion.name}</Text>
+                      <Text style={styles.healthName}>Probability of Disease:</Text>
+                      <Text style={styles.healthNameValue}>{suggestion.probability}</Text>
                       {/* Add more health-related information here */}
                     </View>
                   )
@@ -238,7 +238,18 @@ color: 'black',
     flex: 1,
   },
   headerBold:{
-color:'black',
+  color:'black',
+  },
+  healthName:{
+    color:'black',
+    padding: 30,
+    left: -10,
+    fontWeight: 'bold',
+  },
+  healthNameValue:{
+    color:'#8FB79A',
+    left: 30,
+
   },
   innerContainer:{
     height: 20,
