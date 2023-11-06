@@ -40,18 +40,20 @@ const registerNewUser = (email, password) => {
         });
 };
 
-//sign in
+// signInUser function
 const signInUser = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
+  return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Successfully signed in
       const user = userCredential.user;
       console.log("Signed in User: " + user.email);
+      return user; // Return the user object on success
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode + ": " + errorMessage);
+      throw new Error(errorMessage); // Throw an error on failure
     });
 };
 

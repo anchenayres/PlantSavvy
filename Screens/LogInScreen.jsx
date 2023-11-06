@@ -13,16 +13,16 @@ const LogInScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       const user = await signInUser(email, password);
-    if (user && user.email) {
-      navigation.navigate("HomeScreen");
-    } else {
+      if (user && user.email) {
+        navigation.navigate("HomeScreen");
+      } else {
+        setShowErrorMessage(true);
+      }
+    } catch (error) {
       setShowErrorMessage(true);
     }
-  } catch (error) {
-    setShowErrorMessage(true);
-  }
   };
-
+    
 
   
   return (
