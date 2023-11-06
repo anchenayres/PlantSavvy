@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, View, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import { identifyPlant } from '../Services/PlantIdService';
+import { Modal } from 'react-native';
 
 
 const PlantDetailScreen = ({route}) => {
@@ -11,7 +12,18 @@ const PlantDetailScreen = ({route}) => {
   const isPlant = identificationResult.result.is_plant;
   
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImageURL, setSelectedImageURL] = useState('');
 
+  const openModal = () => {
+    console.log('Selected Image URL:', url);
+    setSelectedImageURL(url);
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+  
 
   //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
 
@@ -26,7 +38,6 @@ const PlantDetailScreen = ({route}) => {
     
     <View style={styles.headerBlock}>
         <Text style={styles.headerText}>Plant Identified As</Text>
-        <Text style={styles.headerBold}>{identificationResult.result.classification.suggestions[0].name}</Text>
       </View>
 
           
@@ -48,53 +59,80 @@ const PlantDetailScreen = ({route}) => {
 
         {displayContent === 'speciesIdentification' && (
           <View style={styles.speciesIdentificationContainer}>
-                <Text style={styles.bold}>{identificationResult.result.classification.suggestions[0].name}</Text>
-                <Text style={styles.probability}>Probability | {identificationResult.result.is_plant.probability}</Text>
-                {identificationResult.result.classification.suggestions.length > 0 && (
-                  <Text style={styles.suggestName}>Common Names | 
-                    {identificationResult.result.classification.suggestions
-                      .map((suggestion) => suggestion.name)
-                      .join(', ')}
-                  </Text>
-        )}
-{/* Display Similar Images */}
-<Text style={styles.sectionHeader}>Similar Images</Text>
+                <Text style={styles.probability}>Probability </Text>
+                <Text style={styles.probabilityValue}>
+                {identificationResult.result.is_plant.probability}
+                </Text>
+                <Text style={styles.suggestName}>Common Names</Text>
+                <Text style={styles.commonNamesValue}>
+                  {identificationResult.result.classification.suggestions
+                    .map((suggestion) => suggestion.name)
+                    .join(', ')}
+                </Text>
+
+
+{displayContent === 'speciesIdentification' && (
+  <View style={styles.speciesIdentificationContainer}>
+    {/* ...other content */}
+    <Text style={styles.sectionHeader}>Similar Images</Text>
+    <View style={styles.similarImagesContainer}>
+      {Array.isArray(identificationResult.result.classification.suggestions[0].similar_images) ? (
+        identificationResult.result.classification.suggestions[0].similar_images.map(
+          (similarImage, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                openModal(similarImage.url_small);
+              }}
+            >
+              <Image
+                source={{ uri: similarImage.url_small }}
+                style={styles.similarImage}
+              />
+            </TouchableOpacity>
+          )
+        )
+      ) : (
+        <Text>No similar images found.</Text>
+      )}
+    </View>
+  </View>
+)}
+
+
             <View style={styles.similarImagesContainer}>
-              {identificationResult.result.classification.suggestions[0].similar_images?.map(
-                (similarImage) => (
-                  <TouchableOpacity
-                    key={similarImage.id}
-                    onPress={() => {
-                      // Handle opening or displaying the similar image
-                      // You can open a modal or navigate to a new screen for details
-                    }}
-                  >
-                    <Image
-                      source={{ uri: similarImage.url_small }}
-                      style={styles.similarImage}
-                    />
-                  </TouchableOpacity>
-                )
-              )}
-            </View>
+    {identificationResult.result.classification.suggestions[0].similar_images?.map(
+      (similarImage) => (
+        <TouchableOpacity
+          key={similarImage.id}
+          onPress={() => openModal(similarImage.url_small)} // Open the modal with the selected image URL
+        >
+          <Image
+            source={{ uri: similarImage.url_small }}
+            style={styles.similarImage}
+          />
+        </TouchableOpacity>
+      )
+    )}
+  </View>
 
-            {/* Display Similar Plants */}
-            <Text style={styles.bold}>Similar Plants</Text>
-          <View style={styles.similarPlantsContainer}>
-            {identificationResult.result.classification.suggestions.slice(1).map((suggestion) => (
-              <TouchableOpacity
-                key={suggestion.id}
-                onPress={() => {
-                  // Handle opening or displaying details for the similar plant
-                  // You can navigate to a new screen for details
-                }}
-              >
-                <Text style={styles.similarPlantName}>{suggestion.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-
+      {/* Similar Image Modal */}
+      <Modal
+    animationType="slide"
+    transparent={true}
+    visible={modalVisible}
+    onRequestClose={() => setModalVisible(false)}
+  >
+    <View style={styles.modalContainer}>
+      <Image
+        source={{ uri: selectedImageURL }}
+        style={styles.modalImage}
+      />
+      <TouchableOpacity onPress={closeModal}>
+        <Text style={styles.closeModalText}>Close</Text>
+      </TouchableOpacity>
+    </View>
+  </Modal>
 
 
       
@@ -131,6 +169,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  probabilityValue:{
+    left: 10.,
+    padding:10,
+  },
+  commonNamesValue:{
+    left: 10.,
+    padding:10,
+  },
 
   imageContainer: {
     flex: 1,
@@ -141,7 +187,7 @@ color:'black',
   innerContainer:{
     height: 20,
     width: 370,
-    left: 20,
+    left: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 30,
     top: 80,
@@ -179,7 +225,7 @@ color:'black',
     padding: 2,
     margin: 10,
     color: 'black',
-    
+    fontWeight: 'bold',
   },
   plantImage: {
     width: 430,
@@ -243,6 +289,24 @@ color:'black',
   detailText: {
     fontSize: 16,
     marginBottom: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'pink',
+  },
+  modalImage: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
+    backgroundColor: 'red',
+  },
+  closeModalText: {
+    color: 'black',
+    fontSize: 16,
+    margin: 20,
+    textAlign: 'center',
   },
 
 });

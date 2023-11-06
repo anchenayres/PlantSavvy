@@ -14,7 +14,7 @@ const ScanScreen = () => {
   const navigation = useNavigation();
   const [imageUri, setImageUri] = useState(null);
   const [base64, setBase64] = useState();
-  const [uploadButtonVisible, setUploadButtonVisible] = useState(true);
+  //const [uploadButtonVisible, setUploadButtonVisible] = useState(true);
   const userEmail = useUserEmail();
 
 
@@ -36,7 +36,7 @@ const ScanScreen = () => {
             setBase64(imageBase64)
             console.log('Image as base64:', imageBase64);
 
-            setUploadButtonVisible(false);
+            //setUploadButtonVisible(false);
 
           }
         } catch (error) {
@@ -64,24 +64,20 @@ const ScanScreen = () => {
 
   
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff',
-    }}>
-      {uploadButtonVisible && (
-        <TouchableOpacity
-          style={styles.uploadButton}
-          onPress={handleImagePick}
-        >
-          <Text style={styles.buttonText}>Upload</Text>
-        </TouchableOpacity>
-      )}
-        {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
-        {imageUri && (
+<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+      <TouchableOpacity style={styles.uploadButton} onPress={handleImagePick}>
+        <Text style={styles.buttonText}>
+          {imageUri ? 'Change Image' : 'Upload'}
+        </Text>
+      </TouchableOpacity>
+      {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
+      {imageUri && (
         <TouchableOpacity style={styles.loginButton} onPress={handleConfirm}>
           <Text style={styles.buttonLogin}>Confirm</Text>
-        </TouchableOpacity>    
-)}
-      </View>    
-      );
+        </TouchableOpacity>
+      )}
+    </View>    
+    );
     }
 
 const styles = StyleSheet.create({
@@ -95,8 +91,7 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: "#0B4D21",
     borderRadius: 5,
-    marginTop: 80,
-    padding: 10,
+    padding: 15,
   },
   buttonLogin: {
     fontSize: 16,
@@ -126,7 +121,15 @@ const styles = StyleSheet.create({
   },
   confirm:{
 
-  }
+  },
+  carryPlant: {
+    width: 400, // Adjust the width as needed
+    height: 450, // Adjust the height as needed
+    position: 'absolute',
+    left: 10, 
+    top: 150,
+  },
+
 });
 
 export default ScanScreen;

@@ -131,6 +131,7 @@ const HomeScreen = () => {
                 <View key={index} style={styles.imageContainer} >
                   <TouchableOpacity onPress={() => handleImageClick(image.image_url, image.base64)}>
                   <Image source={{ uri: image.image_url }} style={styles.image} />
+                  
                   </TouchableOpacity>
                 </View>
               ))}
