@@ -31,7 +31,9 @@
     "react-native-config": "^1.5.1",
     "react-native-fs": "^2.20.0",
     "react-native-image-picker": "^7.0.1",
-    "react-navigation": "^5.0.0"
+    "react-native-webview": "^13.6.2",
+    "react-navigation": "^5.0.0",
+    "expo-font": "~11.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

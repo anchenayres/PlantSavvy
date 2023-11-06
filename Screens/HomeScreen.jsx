@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 //import RNFS from 'react-native-fs'; //convert to base64 image
 
 import { identifyPlant } from '../Services/PlantIdService';
+import { WebView } from 'react-native-webview';
 
 const auth = getAuth();
 
@@ -114,7 +115,16 @@ const HomeScreen = () => {
           {isLoading ? (
             <Text>Loading images...</Text>
           ) : images.length === 0 ? (
-            <Text>No images to display</Text>
+            <View style={{ width: 1000 }}>
+              <Text style={styles.noImage}>
+                Let's make this collection feel like{' '}
+              <Text style={styles.boldRedText}>HOME</Text>. Let's fetch some plants!
+        </Text>             
+        <Image
+              source={require("../assets/carryPlant2.png")} // Check the path to your image
+              style={styles.carryPlant}
+              />        
+            </View>
           ) : (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {images.map((image, index) => (
@@ -166,7 +176,24 @@ const styles = StyleSheet.create({
       left: 0, 
       top: -30,
     },
-
+    carryPlant: {
+      width: 400, // Adjust the width as needed
+      height: 450, // Adjust the height as needed
+      position: 'absolute',
+      left: 10, 
+      top: 150,
+    },
+    noImage:{
+      color: 'black',
+      left: 110,
+      width: 200,
+      textAlign: 'center',
+      top: 30,
+    },
+    boldRedText: {
+      fontWeight: 'bold',
+      color: '#0B4D21',
+    },
     addIcon: {
       marginTop: 18, 
       left: 245, 
@@ -177,7 +204,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         top: 20,
-        left: 20,
+        left: 40,
         position: 'absolute',
       },
     logoutButton:{
