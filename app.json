@@ -7,9 +7,9 @@
     "icon": "./assets/planthealth.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/plantLogo2.png",
+      "backgroundColor": "white",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
       "plugins": [
         [
           "expo-image-picker",
