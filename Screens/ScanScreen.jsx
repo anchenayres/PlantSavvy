@@ -65,11 +65,13 @@ const ScanScreen = () => {
   
     return (
 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+  
       <TouchableOpacity style={styles.uploadButton} onPress={handleImagePick}>
         <Text style={styles.buttonText}>
           {imageUri ? 'Change Image' : 'Upload'}
         </Text>
       </TouchableOpacity>
+
       {imageUri && <Image source={{ uri: imageUri }} style={styles.selectedImage} />}
       {imageUri && (
         <TouchableOpacity style={styles.loginButton} onPress={handleConfirm}>
@@ -92,6 +94,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#0B4D21",
     borderRadius: 5,
     padding: 15,
+  },
+  backgroundImage:{
+    height: 220,
+    width: 800,
   },
   buttonLogin: {
     fontSize: 16,

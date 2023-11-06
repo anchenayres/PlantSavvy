@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, View, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import { Modal } from 'react-native';
+import { assessPlantHealth } from '../Services/PlantIdService';
 
 
 const PlantDetailScreen = ({route}) => {
@@ -18,10 +19,11 @@ const PlantDetailScreen = ({route}) => {
 
   const openModal = () => {
     console.log('Selected Image URL:', similarImageUrl);
-    setSelectedImageURL(similarImageUrl);
+    setSelectedImageURL(url);
     setModalVisible(true);
   };
   const closeModal = () => {
+    setSelectedImageURL('');
     setModalVisible(false);
   };
   
@@ -202,6 +204,14 @@ const PlantDetailScreen = ({route}) => {
   </View>
 )}
 
+<Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={closeModal}>
+        <View style={styles.modalContainer}>
+          <Image source={{ uri: selectedImageURL }} style={styles.modalImage} />
+          <TouchableOpacity style={styles.closeModalButton} onPress={closeModal}>
+            <Text style={styles.closeModalText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
 
 
 
@@ -391,18 +401,24 @@ color: 'black',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'pink',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Adjust the background color and opacity
   },
   modalImage: {
     width: 300,
     height: 300,
     resizeMode: 'contain',
-    backgroundColor: 'red',
+    backgroundColor: 'white', // Set the background color for the modal
+    borderRadius: 10,
+  },
+  closeModalButton: {
+    backgroundColor: 'white', // Set the background color for the close button
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 10,
   },
   closeModalText: {
     color: 'black',
     fontSize: 16,
-    margin: 20,
     textAlign: 'center',
   },
 

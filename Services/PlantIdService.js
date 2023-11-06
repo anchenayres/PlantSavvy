@@ -35,7 +35,7 @@ async function identifyPlant(imageBase64, latitude, longitude, similar_images) {
   }
 }
 
-async function assessPlantHealth(imageBase64, latitude, longitude) {
+async function assessPlantHealth(imageBase64, latitude, longitude, similar_images) {
   const apiUrl = 'https://plant.id/api/v3/health_assessment';
   const PlantIdApiKey = 'OKsSs9dRIQRkLhJY2kkqvmcPW5Koo13unmXUjxCTkIctoHshYL';
 
@@ -46,6 +46,8 @@ async function assessPlantHealth(imageBase64, latitude, longitude) {
         images: [imageBase64],
         latitude,
         longitude,
+        similar_images: similar_images,
+
       },
       {
         headers: {
