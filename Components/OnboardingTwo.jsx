@@ -9,10 +9,6 @@ const OnboardingTwo = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-            <Image
-        source={require("../assets/plantWallpaper.jpg")} // Check the path to your image
-        style={styles.backgroundImage}
-      />        
 
       <Text style={styles.title}>Upload your Plant</Text>
       <Image

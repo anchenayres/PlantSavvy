@@ -3,10 +3,12 @@ import { StyleSheet, Button, View, Image, Text, ScrollView, TouchableOpacity } f
 import {useRoute} from '@react-navigation/native';
 import { Modal } from 'react-native';
 import { assessPlantHealth } from '../Services/PlantIdService';
-
+import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const PlantDetailScreen = ({route}) => {
 
+  const navigation = useNavigation();
   const { identificationResult } = route.params;
   const suggestions = identificationResult.result.classification.suggestions;
   const isPlant = identificationResult.result.is_plant;
@@ -67,8 +69,16 @@ const PlantDetailScreen = ({route}) => {
         source={require("../assets/plantWallpaper.jpg")} // Check the path to your image
         style={styles.backgroundImage}
       />        
+          <TouchableOpacity
+    onPress={() => navigation.goBack()} // You should have the navigation prop available
+    style={styles.backButton}
+  >
+    <FontAwesome5 name="arrow-left" size={24} color="black" />
+  </TouchableOpacity>
+
     
     <View style={styles.headerBlock}>
+
         <Text style={styles.headerText}>Plant Identified As</Text>
         <Text style={styles.headerBold}>{identificationResult.result.classification.suggestions[0].name}</Text>
       </View>
@@ -245,6 +255,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+  },
+  backButton:{
+    top: 50,
+    left:20,
   },
   backgroundImage: {
     position: 'absolute',
