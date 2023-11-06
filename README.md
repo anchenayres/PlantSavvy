@@ -26,7 +26,7 @@
 - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
-![image0](./MockUps/1.png)
+![image0](./assets/mockup1.png)
 
 ## About the Project
 
