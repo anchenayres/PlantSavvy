@@ -22,6 +22,8 @@ const HomeScreen = () => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [base64, setBase64] = useState(null);
+  const details = true;  //details
+  const language = 'en'; //details
 
   const getImages = async () => {
 
@@ -83,8 +85,12 @@ const HomeScreen = () => {
   
   //navigate to detail screen based on base64
   const handleImageClick = async (imageUri, base64) => {
+    const latitude = 49.207; // Set your desired latitude
+    const longitude = 16.608;
     try {
-      const result = await identifyPlant(base64);
+      const details = true; 
+      const language = 'en';
+      const result = await identifyPlant(base64, latitude, longitude, true, details, language);
       console.log('Identification Result:', result); // Add this line
   
        navigation.navigate('PlantDetailScreen', { imageUri, identificationResult: result });

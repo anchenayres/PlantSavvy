@@ -2,8 +2,8 @@ import axios from "axios";
 import Config from "react-native-config";
 console.log("Environment Variables:", Config);
 
-async function identifyPlant(imageBase64, latitude, longitude, similar_images, health) {
-  const apiUrl = 'https://plant.id/api/v3/identification';
+async function identifyPlant(imageBase64, latitude, longitude, similar_images) {
+  const apiUrl = 'https://plant.id/api/v3/identification?common_names,taxonomy,url';
 
   const PlantIdApiKey = 'OKsSs9dRIQRkLhJY2kkqvmcPW5Koo13unmXUjxCTkIctoHshYL';
   console.log("Plant ID API Key:", PlantIdApiKey);
@@ -17,7 +17,7 @@ async function identifyPlant(imageBase64, latitude, longitude, similar_images, h
         latitude,
         longitude,
         similar_images: similar_images,
-        health,
+        health: "all",
       },
       {
         headers: {

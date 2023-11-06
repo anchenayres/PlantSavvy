@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, View, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import { identifyPlant } from '../Services/PlantIdService';
 import { Modal } from 'react-native';
 
 
@@ -11,6 +10,8 @@ const PlantDetailScreen = ({route}) => {
   const suggestions = identificationResult.result.classification.suggestions;
   const isPlant = identificationResult.result.is_plant;
   
+  const [taxonomy, setTaxonomy] = useState(null); //details
+  const [description, setDescription] = useState(null); //details
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState('');
@@ -24,10 +25,31 @@ const PlantDetailScreen = ({route}) => {
     setModalVisible(false);
   };
   
+  
+  useEffect(() => {
+    if (route.params) {
+      const identificationResult = route.params.identificationResult;
+  
+      if (identificationResult) {
+        // Set taxonomy data
+        setTaxonomy(identificationResult.result.classification.suggestions[0].details.taxonomy);
+  
+        // Set description data
+        const description = identificationResult.result.classification.suggestions[0].details.description;
+        setDescription(description);
+      }
+    }
+  }, [route.params]);
 
   //console.log("Detail Page Image:", identifyPlant) //still undefined API UNDEFINED
 
   const [displayContent, setDisplayContent] = useState('speciesIdentification');
+
+
+
+
+
+
 
   return (
     <View style={styles.container}>
@@ -71,33 +93,7 @@ const PlantDetailScreen = ({route}) => {
                 </Text>
 
 
-{displayContent === 'speciesIdentification' && (
-  <View style={styles.speciesIdentificationContainer}>
-    {/* ...other content */}
-    <Text style={styles.sectionHeader}>Similar Images</Text>
-    <View style={styles.similarImagesContainer}>
-      {Array.isArray(identificationResult.result.classification.suggestions[0].similar_images) ? (
-        identificationResult.result.classification.suggestions[0].similar_images.map(
-          (similarImage, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => {
-                openModal(similarImage.url_small);
-              }}
-            >
-              <Image
-                source={{ uri: similarImage.url_small }}
-                style={styles.similarImage}
-              />
-            </TouchableOpacity>
-          )
-        )
-      ) : (
-        <Text>No similar images found.</Text>
-      )}
-    </View>
-  </View>
-)}
+
 
 
             <View style={styles.similarImagesContainer}>
@@ -134,21 +130,74 @@ const PlantDetailScreen = ({route}) => {
     </View>
   </Modal>
 
+  <Text style={styles.bold}>Taxonomy</Text>
+  {taxonomy && (
+  <View style={styles.taxonomyContainer}>
+    <Text style={styles.sectionHeader}>Taxonomy</Text>
+    <Text style={styles.taxonomyText}>Class: {taxonomy.class}</Text>
+    <Text style={styles.taxonomyText}>Genus: {taxonomy.genus}</Text>
+    <Text style={styles.taxonomyText}>Order: {taxonomy.order}</Text>
+    <Text style={styles.taxonomyText}>Family: {taxonomy.family}</Text>
+    <Text style={styles.taxonomyText}>Phylum: {taxonomy.phylum}</Text>
+    <Text style={styles.taxonomyText}>Kingdom: {taxonomy.kingdom}</Text>
+  </View>
+)}
+{!taxonomy && (
+  <View>
+<Text style={styles.unavailable}>*Unfortunalty there is no taxonomy available, this may be due to an unclear image upload.</Text>
+  </View>
+)}
+    <Text style={styles.bold}>Description</Text>
+
+{description && ( // Check if there's a description
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.sectionHeader}>Description</Text>
+          <Text style={styles.descriptionText}>{description}</Text> {/* Display the description */}
+        </View>
+      )}
+{!description && (
+  <View>
+<Text style={styles.unavailable}>*Unfortunalty there is no description available, this may be due to an unclear image upload.</Text>
+  </View>
+)}
 
       
       </View>
           
         )}
-          {displayContent === 'healthAssessment' && (
-                      <View style={styles.speciesIdentificationContainer}>
-                      <Text style={styles.bold}>{identificationResult.result.classification.suggestions[0].name}</Text>
-                      <Text style={styles.bold}>Common Names</Text>
-                      <Text style={styles.light}>Sacred Lotus</Text>
-                      <Text style={styles.light}>Indian Lotus</Text>
-                      <Text style={styles.light}>Bean of India</Text>
-                  </View>
+
+{displayContent === 'healthAssessment' && (
+          <View style={styles.healthAssessmentContainer}>
+            <Text style={styles.bold}>Health Assessment</Text>
+            <Text style={styles.light}>
+              Common Names:
+              {identificationResult.result.classification.suggestions[0].name}
+            </Text>
+
+            {/* Display health-related information here */}
+            {identificationResult.result.disease && (
+              <View>
+                {identificationResult.result.disease.suggestions.map(
+                  (suggestion, index) => (
+                    <View key={index}>
+                      <Text style={styles.bold}>Disease Name:</Text>
+                      <Text style={styles.light}>{suggestion.name}</Text>
+                      <Text style={styles.bold}>Severity:</Text>
+                      <Text style={styles.light}>{suggestion.severity}</Text>
+                      {/* Add more health-related information here */}
+                    </View>
+                  )
+                )}
+              </View>
+            )}
+            {!identificationResult.result.disease && (
+              <Text style={styles.light}>
+                No health-related information available.
+              </Text>
+            )}
+          </View>
+        )}
       
-      )}
       </ScrollView>
     </View>
   );
@@ -169,6 +218,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  taxonomyText:{
+color: 'black',
+  },
   probabilityValue:{
     left: 10.,
     padding:10,
@@ -177,7 +229,11 @@ const styles = StyleSheet.create({
     left: 10.,
     padding:10,
   },
-
+  unavailable:{
+    left: 10.,
+    padding:10,
+    color: 'red',
+  },
   imageContainer: {
     flex: 1,
   },
